@@ -1,0 +1,502 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <title>AFFILIX MEDIA – Kedai Produk Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Glass effect */
+    .glass {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+    .neon-border {
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.7),
+                  0 0 32px rgba(147, 51, 234, 0.7);
+    }
+    .bg-grid {
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.18) 1px, transparent 0);
+      background-size: 40px 40px;
+    }
+    .fade-enter {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+  </style>
+</head>
+<body class="bg-black text-slate-100 min-h-screen flex flex-col">
+  <!-- Floating background gradient -->
+  <div class="pointer-events-none fixed inset-0 opacity-60">
+    <div class="absolute -top-32 -left-32 w-72 h-72 rounded-full bg-cyan-500 blur-3xl"></div>
+    <div class="absolute -bottom-40 -right-10 w-80 h-80 rounded-full bg-purple-700 blur-3xl"></div>
+  </div>
+
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 bg-black/80 backdrop-blur border-b border-slate-800">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-3">
+        <!-- Ganti src logo ikut file anda -->
+        <img src="affilixmedia-logo.png" alt="AFFILIX MEDIA" class="w-9 h-9 object-contain" />
+        <div class="leading-tight">
+          <p class="font-semibold tracking-[0.18em] text-xs text-cyan-300">AFFILIX</p>
+          <p class="font-semibold tracking-[0.14em] text-xs text-slate-200">MEDIA</p>
+        </div>
+      </div>
+      <nav class="hidden md:flex gap-6 text-sm text-slate-300">
+        <a href="#home" class="hover:text-cyan-300">Home</a>
+        <a href="#produk" class="hover:text-cyan-300">Produk</a>
+        <a href="#testimoni" class="hover:text-cyan-300">Testimoni</a>
+        <a href="#faq" class="hover:text-cyan-300">FAQ</a>
+      </nav>
+      <button id="cartButton" class="relative glass px-3 py-1.5 rounded-full text-xs flex items-center gap-2 hover:border-cyan-400 border border-slate-700">
+        <span class="text-lg">🛒</span>
+        <span>Cart</span>
+        <span id="cartCount" class="text-[10px] bg-cyan-500 text-black rounded-full px-2 py-0.5">0</span>
+      </button>
+    </div>
+  </header>
+
+
+  <!-- MAIN -->
+  <main class="flex-1">
+    <!-- HERO -->
+    <section id="home" class="max-w-6xl mx-auto px-4 pt-10 pb-12 lg:flex lg:items-center lg:gap-10">
+      <div class="relative z-10 lg:w-1/2">
+        <p class="text-xs uppercase tracking-[0.28em] text-cyan-300 mb-3">AFFILIX MEDIA</p>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">
+          Kedai <span class="text-cyan-400">Produk Digital</span><br />
+          Untuk <span class="text-purple-400">Creator & Marketer</span>
+        </h1>
+        <p class="text-sm sm:text-base text-slate-300 mb-5">
+          Topup ChatGPT Plus, Canva Pro, CapCut Pro & banyak lagi tools digital –
+          semua dalam satu landing page. Klik, pilih produk, dan checkout terus ke
+          WhatsApp business AFFILIX MEDIA.
+        </p>
+        <div class="flex flex-wrap items-center gap-3 mb-6">
+          <button onclick="openWhatsAppDirect()" class="neon-border bg-gradient-to-r from-cyan-500 to-purple-600 text-black font-semibold text-sm px-5 py-2.5 rounded-full hover:scale-105 active:scale-95 transition">
+            Beli Sekarang di WhatsApp
+          </button>
+          <span class="text-[11px] px-3 py-1 rounded-full border border-slate-700 glass">
+            ⚡ Promo terhad – stok digital terhad setiap hari
+          </span>
+        </div>
+
+
+        <!-- Countdown -->
+        <div class="glass rounded-2xl p-4 inline-flex items-center gap-4">
+          <div>
+            <p class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Promo Tamat Dalam</p>
+            <div id="countdown" class="flex gap-4 mt-1 text-center text-xs">
+              <div>
+                <p id="cdDays" class="text-xl font-bold text-cyan-300">00</p>
+                <p class="text-[10px] text-slate-400">Hari</p>
+              </div>
+              <div>
+                <p id="cdHours" class="text-xl font-bold text-cyan-300">00</p>
+                <p class="text-[10px] text-slate-400">Jam</p>
+              </div>
+              <div>
+                <p id="cdMinutes" class="text-xl font-bold text-cyan-300">00</p>
+                <p class="text-[10px] text-slate-400">Minit</p>
+              </div>
+              <div>
+                <p id="cdSeconds" class="text-xl font-bold text-cyan-300">00</p>
+                <p class="text-[10px] text-slate-400">Saat</p>
+              </div>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-300 max-w-[180px]">
+            Harga promo khas untuk batch terhad. Lepas habis timer, harga mungkin naik.
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Hero product card -->
+      <div class="relative z-10 mt-10 lg:mt-0 lg:w-1/2 flex justify-center">
+        <div class="glass rounded-3xl p-6 w-full max-w-sm neon-border bg-grid">
+          <p class="text-[11px] uppercase tracking-[0.18em] text-cyan-300 mb-2">
+            Produk Highlight
+          </p>
+          <h2 class="text-xl font-semibold mb-1">ChatGPT Plus 1 Bulan</h2>
+          <p class="text-sm text-slate-300 mb-4">
+            Akses AI laju, stabil & lebih pintar untuk kerja, bisnes dan belajar.
+          </p>
+          <div class="flex items-end justify-between mb-5">
+            <div>
+              <p class="text-xs text-slate-400 line-through">RM83+</p>
+              <p class="text-3xl font-bold text-cyan-300">RM25</p>
+              <p class="text-[11px] text-slate-400 mt-1">
+                Guna email sendiri · Fast delivery
+              </p>
+            </div>
+            <div class="flex flex-col items-end gap-1">
+              <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                ✅ Trusted Seller
+              </span>
+              <span class="text-[11px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40">
+                ⚠ Slot tak banyak
+              </span>
+            </div>
+          </div>
+          <button onclick="addHighlightedProduct()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-sm py-2.5 rounded-full mb-2 transition">
+            Tambah ke Cart
+          </button>
+          <button onclick="openCart()" class="w-full text-xs text-cyan-300 underline">
+            Lihat Cart & Checkout via WhatsApp
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- PRODUK SECTION -->
+    <section id="produk" class="max-w-6xl mx-auto px-4 pb-14">
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5">
+        <div>
+          <p class="text-xs uppercase tracking-[0.22em] text-cyan-300 mb-1">Produk</p>
+          <h2 class="text-2xl font-semibold">Senarai Produk Digital</h2>
+          <p class="text-sm text-slate-300">Pilih beberapa produk, tambah ke cart dan checkout sekali gus melalui WhatsApp.</p>
+        </div>
+        <!-- Search -->
+        <div class="flex items-center gap-2">
+          <input id="searchInput" type="text" placeholder="Cari produk..."
+                 class="glass border border-slate-700 text-xs rounded-full px-3 py-2 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 w-48 sm:w-64" />
+        </div>
+      </div>
+
+
+      <!-- Category buttons -->
+      <div id="categoryButtons" class="flex flex-wrap gap-2 mb-6 text-xs"></div>
+
+
+      <!-- Product grid -->
+      <div id="productGrid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </section>
+
+
+    <!-- TESTIMONI -->
+    <section id="testimoni" class="max-w-6xl mx-auto px-4 pb-14">
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+        <div class="md:w-1/3">
+          <p class="text-xs uppercase tracking-[0.22em] text-cyan-300 mb-1">Social Proof</p>
+          <h2 class="text-2xl font-semibold mb-2">Apa pelanggan cakap?</h2>
+          <p class="text-sm text-slate-300">
+            Pelanggan guna AFFILIX MEDIA untuk mudahkan kerja content, marketing dan editing mereka setiap hari.
+          </p>
+        </div>
+        <div class="md:w-2/3">
+          <div id="testimonialCard" class="glass rounded-3xl p-6 min-h-[160px] flex flex-col justify-between">
+            <p id="testimonialText" class="text-sm text-slate-100 mb-4"></p>
+            <div class="flex items-center justify-between">
+              <div>
+                <p id="testimonialName" class="text-sm font-semibold"></p>
+                <p id="testimonialRole" class="text-xs text-slate-400"></p>
+              </div>
+              <div class="flex gap-1 text-amber-400 text-xs">
+                ★★★★★
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- FAQ -->
+    <section id="faq" class="max-w-6xl mx-auto px-4 pb-16">
+      <div class="max-w-2xl mb-6">
+        <p class="text-xs uppercase tracking-[0.22em] text-cyan-300 mb-1">Soalan Lazim</p>
+        <h2 class="text-2xl font-semibold mb-2">FAQ AFFILIX MEDIA</h2>
+        <p class="text-sm text-slate-300">Beberapa soalan yang selalu ditanya sebelum order.</p>
+      </div>
+      <div class="space-y-3 max-w-2xl">
+        <div class="glass rounded-2xl">
+          <button class="w-full flex items-center justify-between px-4 py-3 text-left text-sm" onclick="toggleFaq(0)">
+            <span>Bagaimana proses order?</span>
+            <span class="text-xs text-slate-400" id="faqIcon0">+</span>
+          </button>
+          <div id="faqBody0" class="px-4 pb-3 text-xs text-slate-300 hidden">
+            Anda pilih produk & tambah ke cart, tekan "Checkout via WhatsApp" dan hantarkan mesej.
+            Admin akan respon dengan details pembayaran & aktifkan akaun / hantar akses anda.
+          </div>
+        </div>
+        <div class="glass rounded-2xl">
+          <button class="w-full flex items-center justify-between px-4 py-3 text-left text-sm" onclick="toggleFaq(1)">
+            <span>Berapa lama masa proses?</span>
+            <span class="text-xs text-slate-400" id="faqIcon1">+</span>
+          </button>
+          <div id="faqBody1" class="px-4 pb-3 text-xs text-slate-300 hidden">
+            Kebiasaannya dalam 1–10 minit waktu bekerja. Waktu peak mungkin sedikit lambat, tapi kami akan cuba secepat mungkin.
+          </div>
+        </div>
+        <div class="glass rounded-2xl">
+          <button class="w-full flex items-center justify-between px-4 py-3 text-left text-sm" onclick="toggleFaq(2)">
+            <span>Adakah saya guna email sendiri?</span>
+            <span class="text-xs text-slate-400" id="faqIcon2">+</span>
+          </button>
+          <div id="faqBody2" class="px-4 pb-3 text-xs text-slate-300 hidden">
+            Ya, untuk produk seperti ChatGPT Plus & beberapa tools lain, anda boleh gunakan email sendiri (ikut info pada kad produk).
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800 bg-black/80">
+    <div class="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-3 items-center justify-between text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <img src="affilixmedia-logo.png" alt="AFFILIX MEDIA" class="w-6 h-6 object-contain" />
+        <span>AFFILIX MEDIA · Kedai Produk Digital untuk Creator & Marketer.</span>
+      </div>
+      <div class="flex gap-3">
+        <span>© <span id="year"></span> AFFILIX MEDIA</span>
+        <span class="hidden sm:inline">|</span>
+        <span>All digital orders via WhatsApp.</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 hidden">
+    <!-- overlay -->
+    <div class="absolute inset-0 bg-black/60" onclick="closeCart()"></div>
+    <!-- drawer -->
+    <div class="absolute right-0 top-0 h-full w-full max-w-sm glass bg-black/95 border-l border-slate-800 flex flex-col">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+        <h3 class="text-sm font-semibold">Cart AFFILIX MEDIA</h3>
+        <button class="text-xs text-slate-400" onclick="closeCart()">Tutup ✕</button>
+      </div>
+      <div id="cartItems" class="flex-1 overflow-y-auto px-4 py-3 text-sm"></div>
+      <div class="border-t border-slate-800 p-4 space-y-2">
+        <div class="flex items-center justify-between text-sm">
+          <span>Total</span>
+          <span id="cartTotal" class="font-semibold text-cyan-300">RM0</span>
+        </div>
+        <button onclick="checkoutWhatsApp()" class="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-black text-sm font-semibold py-2.5 rounded-full hover:scale-[1.02] active:scale-95 transition">
+          Checkout via WhatsApp
+        </button>
+        <p class="text-[10px] text-slate-400">
+          Nota: Tiada bayaran dibuat di website ini. Semua transaksi akan disahkan secara terus melalui WhatsApp.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a id="floatingWA"
+     href="https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0"
+     class="fixed bottom-5 right-4 z-40 rounded-full px-4 py-2 glass border border-emerald-400 shadow-lg flex items-center gap-2 text-xs hover:scale-105 transition">
+    <span>💬</span>
+    <span>Chat WhatsApp</span>
+  </a>
+
+
+  <!-- MAIN SCRIPT -->
+  <script>
+    // ====== CONFIG ======
+    const WHATSAPP_LINK = "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0";
+
+
+    const products = [
+      {
+        id: 1,
+        name: "ChatGPT Plus 1 Bulan",
+        price: 25,
+        category: "AI Tools",
+        desc: "Fast delivery, guna email sendiri.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "Hot",
+        stock: 10
+      },
+      {
+        id: 2,
+        name: "Canva Pro 1 Bulan",
+        price: 12,
+        category: "Design",
+        desc: "Akses penuh premium untuk design marketing & social media.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "Sale",
+        stock: 8
+      },
+      {
+        id: 3,
+        name: "CapCut Pro",
+        price: 10,
+        category: "Editing",
+        desc: "Unlock semua features untuk editing video TikTok & Reels.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "New",
+        stock: 15
+      },
+      {
+        id: 4,
+        name: "Premiere Pro Preset Pack",
+        price: 19,
+        category: "Editing",
+        desc: "Preset color grading & transition untuk editor video.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "Hot",
+        stock: 7
+      },
+      {
+        id: 5,
+        name: "Bundle Skrip Hook TikTok",
+        price: 15,
+        category: "Copywriting",
+        desc: "100+ skrip hook untuk content short-form.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "Hot",
+        stock: 20
+      }
+    ];
+
+
+    let filteredCategory = "All";
+    let searchQuery = "";
+    let cart = [];
+
+
+    // Render category buttons
+    function renderCategories() {
+      const container = document.getElementById("categoryButtons");
+      const categories = ["All", ...new Set(products.map(p => p.category))];
+      container.innerHTML = "";
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        btn.className =
+          "px-3 py-1 rounded-full text-xs border border-slate-700 glass hover:border-cyan-400 transition" +
+          (filteredCategory === cat ? " bg-cyan-500/20 text-cyan-300 border-cyan-500" : "");
+        btn.onclick = () => {
+          filteredCategory = cat;
+          renderProducts();
+          renderCategories();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+
+    // Render products
+    function renderProducts() {
+      const grid = document.getElementById("productGrid");
+      grid.innerHTML = "";
+
+
+      const list = products.filter(p => {
+        const byCategory = filteredCategory === "All" || p.category === filteredCategory;
+        const bySearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return byCategory && bySearch;
+      });
+
+
+      list.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "glass rounded-3xl p-4 flex flex-col justify-between bg-grid hover:translate-y-1 hover:shadow-xl transition";
+
+
+        card.innerHTML = `
+          <div class="mb-3">
+            <div class="relative mb-3">
+              <img src="${p.img}" alt="${p.name}" class="w-full h-40 object-cover rounded-2xl" />
+              ${p.badge ? `<span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-purple-600/80 text-white">${p.badge}</span>` : ""}
+              ${p.stock <= 0 ? `<span class="absolute top-2 right-2 text-[10px] px-2 py-0.5 rounded-full bg-red-600/80 text-white">Sold Out</span>` : ""}
+            </div>
+            <h3 class="text-sm font-semibold mb-1">${p.name}</h3>
+            <p class="text-xs text-slate-300 mb-2">${p.desc}</p>
+            <p class="text-lg font-bold text-cyan-300 mb-1">RM${p.price}</p>
+            <p class="text-[11px] text-slate-400">Kategori: ${p.category} · Stok: ${p.stock}</p>
+          </div>
+          <button ${p.stock <= 0 ? "disabled" : ""}
+            class="mt-3 text-xs font-semibold py-2 rounded-full border border-cyan-500 text-cyan-300 hover:bg-cyan-500 hover:text-black transition disabled:opacity-40 disabled:cursor-not-allowed"
+            onclick="addToCart(${p.id})">
+            ${p.stock <= 0 ? "Stok Habis" : "Tambah ke Cart"}
+          </button>
+        `;
+        grid.appendChild(card);
+      });
+
+
+      if (list.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "text-xs text-slate-400";
+        empty.textContent = "Tiada produk ditemui. Cuba tukar carian atau kategori.";
+        grid.appendChild(empty);
+      }
+    }
+
+
+    // Cart
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      if (!product || product.stock <= 0) return;
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
+      }
+      updateCartUI();
+    }
+
+
+    function addHighlightedProduct() {
+      addToCart(1); // id 1 = ChatGPT Plus
+      openCart();
+    }
+
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCartUI();
+    }
+
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        removeFromCart(id);
+      } else {
+        updateCartUI();
+      }
+    }
+
+
+    function updateCartUI() {
+      const container = document.getElementById("cartItems");
+      const countEl = document.getElementById("cartCount");
+      const totalEl = document.getElementById("cartTotal");
+
+
+      let totalItems = 0;
+      let totalPrice = 0;
+
+
+      container.innerHTML = "";
+
+
+      cart.forEach(item => {
+        totalItems += item.qty;
+        totalPrice += item.price * item.qty;
+
