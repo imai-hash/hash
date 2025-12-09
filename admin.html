@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <title>AFFILIX MEDIA – Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+    .bg-grid {
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.18) 1px, transparent 0);
+      background-size: 40px 40px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <!-- Background -->
+  <div class="pointer-events-none fixed inset-0 opacity-40">
+    <div class="absolute -top-32 -left-32 w-72 h-72 rounded-full bg-cyan-500 blur-3xl"></div>
+    <div class="absolute -bottom-40 -right-10 w-80 h-80 rounded-full bg-purple-700 blur-3xl"></div>
+  </div>
+
+  <div class="relative max-w-6xl mx-auto px-4 py-6 space-y-6">
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-4">
+      <div>
+        <p class="text-xs uppercase tracking-[0.28em] text-cyan-300">AFFILIX MEDIA</p>
+        <h1 class="text-2xl font-semibold">Admin Panel – Produk Digital</h1>
+        <p class="text-xs text-slate-400 mt-1">
+          Tambah / edit produk yang akan muncul di halaman utama (main.html).
+        </p>
+      </div>
+      <a href="main.html"
+         class="text-xs px-3 py-1.5 rounded-full border border-slate-600 glass hover:border-cyan-400">
+        ← Kembali ke Halaman Utama
+      </a>
+    </header>
+
+    <!-- Form Tambah Produk -->
+    <section class="glass bg-grid rounded-2xl p-4 md:p-6">
+      <h2 class="text-lg font-semibold mb-3">Tambah Produk Baru</h2>
+      <form id="productForm" class="grid md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <label class="block mb-1 text-xs text-slate-300">Nama Produk</label>
+          <input required id="name" type="text"
+                 class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-xs focus:outline-none focus:border-cyan-400"
+                 placeholder="Contoh: ChatGPT Plus 1 Bulan" />
+        </div>
+
+        <div>
+          <label class="block mb-1 text-xs text-slate-300">Harga (RM)</label>
+          <input required id="price" type="number" step="0.01" min="0"
+                 class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-xs focus:outline-none focus:border-cyan-400"
+                 placeholder="Contoh: 25" />
+        </div>
+
+        <div>
+          <label class="block mb-1 text-xs text-slate-300">Kategori</label>
+          <input required id="category" type="text"
+                 class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-xs focus:outline-none focus:border-cyan-400"
+                 placeholder="AI Tools, Design, Editing, Copywriting..." />
+        </div>
+
+        <div>
+          <label class="block mb-1 text-xs text-slate-300">Stok</label>
+          <input required id="stock" type="number" min="0"
+                 class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-xs focus:outline-none focus:border-cyan-400"
+                 placeholder="Contoh: 10" />
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block mb-1 text-xs text-slate-300">Deskripsi Ringkas</label>
+          <textarea required id="desc" rows="2"
+                    class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-xs focus:outline-none focus:border-cyan-400"
+                    placeholder="Deskripsi singkat produk..."></textarea>
+        </div>
+
+        <div>
+          <label class="block mb-1 text-xs text-slate-300">URL Gambar</label>
+          <input id="img" type="text"
+                 class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-xs focus:outline-none focus:border-cyan-400"
+                 placeholder="https://..." />
+          <p class="text-[10px] text-slate-500 mt-1">
+            Jika kosong, akan guna placeholder 400x300.
+          </p>
+        </div>
+
+        <div>
+          <label class="block mb-1 text-xs text-slate-300">Badge (optional)</label>
+          <input id="badge" type="text"
+                 class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-xs focus:outline-none focus:border-cyan-400"
+                 placeholder="Hot, New, Sale..." />
+        </div>
+
+        <div class="md:col-span-2 flex items-center justify-between mt-2">
+          <button type="submit"
+                  class="px-4 py-2 rounded-full text-xs font-semibold bg-cyan-500 text-black hover:bg-cyan-400">
+            + Simpan Produk
+          </button>
+          <span id="statusText" class="text-[11px] text-emerald-400 hidden">
+            Produk berjaya disimpan ✔
+          </span>
+        </div>
+      </form>
+    </section>
+
+    <!-- Senarai Produk -->
+    <section class="glass bg-grid rounded-2xl p-4 md:p-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold">Senarai Produk</h2>
+        <button id="resetBtn"
+                class="text-[11px] px-3 py-1 rounded-full border border-red-500/60 text-red-300 hover:bg-red-500/10">
+          Reset ke Produk Default
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-xs">
+          <thead class="text-slate-400 border-b border-slate-700">
+            <tr>
+              <th class="py-2 pr-2 text-left">ID</th>
+              <th class="py-2 pr-2 text-left">Nama</th>
+              <th class="py-2 pr-2 text-left">Harga</th>
+              <th class="py-2 pr-2 text-left">Kategori</th>
+              <th class="py-2 pr-2 text-left">Stok</th>
+              <th class="py-2 pr-2 text-left">Badge</th>
+              <th class="py-2 pr-2 text-left">Tindakan</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody" class="divide-y divide-slate-800"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "affilix_products_v1";
+
+    // Sama macam di main.html
+    const defaultProducts = [
+      {
+        id: 1,
+        name: "ChatGPT Plus 1 Bulan",
+        price: 25,
+        category: "AI Tools",
+        desc: "Fast delivery, guna email sendiri.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "Hot",
+        stock: 10
+      },
+      {
+        id: 2,
+        name: "Canva Pro 1 Bulan",
+        price: 12,
+        category: "Design",
+        desc: "Akses penuh premium untuk design marketing & social media.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "Sale",
+        stock: 8
+      },
+      {
+        id: 3,
+        name: "CapCut Pro",
+        price: 10,
+        category: "Editing",
+        desc: "Unlock semua features untuk editing video TikTok & Reels.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "New",
+        stock: 15
+      },
+      {
+        id: 4,
+        name: "Premiere Pro Preset Pack",
+        price: 19,
+        category: "Editing",
+        desc: "Preset color grading & transition untuk editor video.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "Hot",
+        stock: 7
+      },
+      {
+        id: 5,
+        name: "Bundle Skrip Hook TikTok",
+        price: 15,
+        category: "Copywriting",
+        desc: "100+ skrip hook untuk content short-form.",
+        img: "https://via.placeholder.com/400x300",
+        badge: "Hot",
+        stock: 20
+      }
+    ];
+
+    let products = [];
+
+    function loadProducts() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          products = JSON.parse(saved);
+        } catch (e) {
+          console.error("Parse error, fallback default", e);
+          products = defaultProducts.slice();
+        }
+      } else {
+        products = defaultProducts.slice();
+      }
+    }
+
+    function saveProducts() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById("productTableBody");
+      tbody.innerHTML = "";
+
+      if (!products.length) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="7" class="py-3 text-center text-slate-500">Tiada produk.</td>`;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      products.forEach(p => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-900/60";
+        tr.innerHTML = `
+          <td class="py-2 pr-2">${p.id}</td>
+          <td class="py-2 pr-2">${p.name}</td>
+          <td class="py-2 pr-2">RM${p.price}</td>
+          <td class="py-2 pr-2">${p.category}</td>
+          <td class="py-2 pr-2">${p.stock}</td>
+          <td class="py-2 pr-2">${p.badge || "-"}</td>
+          <td class="py-2 pr-2">
+            <button class="text-[10px] text-red-300 hover:underline" onclick="deleteProduct(${p.id})">
+              Buang
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function deleteProduct(id) {
+      if (!confirm("Buang produk ini?")) return;
+      products = products.filter(p => p.id !== id);
+      saveProducts();
+    }
+
+    document.getElementById("productForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const price = parseFloat(document.getElementById("price").value);
+      const category = document.getElementById("category").value.trim();
+      const stock = parseInt(document.getElementById("stock").value, 10);
+      const desc = document.getElementById("desc").value.trim();
+      const img = document.getElementById("img").value.trim() || "https://via.placeholder.com/400x300";
+      const badge = document.getElementById("badge").value.trim();
+
+      if (!name || isNaN(price) || !category || isNaN(stock) || !desc) {
+        alert("Sila lengkapkan semua field wajib.");
+        return;
+      }
+
+      const newProduct = {
+        id: Date.now(), // ID unik simple
+        name,
+        price,
+        category,
+        desc,
+        img,
+        badge: badge || null,
+        stock
+      };
+
+      products.push(newProduct);
+      saveProducts();
+
+      this.reset();
+
+      const status = document.getElementById("statusText");
+      status.classList.remove("hidden");
+      setTimeout(() => status.classList.add("hidden"), 2000);
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", function () {
+      if (!confirm("Reset semua produk ke default? Tindakan ini akan buang semua produk custom.")) return;
+      products = defaultProducts.slice();
+      saveProducts();
+    });
+
+    // Init
+    loadProducts();
+    renderTable();
+  </script>
+</body>
+</html>
