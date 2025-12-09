@@ -314,13 +314,12 @@
   <script>
     // ====== CONFIG ======
 <script>
-  // ====== CONFIG ======
+ <script>
+  // ===== CONFIG =====
   const WHATSAPP_LINK = "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0";
-
-  // key untuk simpan produk dalam localStorage
   const STORAGE_KEY = "affilix_products_v1";
 
-  // produk default (bila belum ada dalam localStorage)
+  // Sama seperti di admin.html
   const defaultProducts = [
     {
       id: 1,
@@ -386,14 +385,14 @@
         products = JSON.parse(saved);
       } catch (e) {
         console.error("Failed to parse products from storage, fallback to default", e);
-        products = defaultProducts;
+        products = defaultProducts.slice();
       }
     } else {
-      products = defaultProducts;
+      products = defaultProducts.slice();
     }
   }
 
-  // panggil dulu sebelum render UI
+  // PANGGIL DULU SEBELUM RENDER
   loadProductsFromStorage();
 
     // Render category buttons
