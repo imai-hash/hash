@@ -313,67 +313,88 @@
   <!-- MAIN SCRIPT -->
   <script>
     // ====== CONFIG ======
-    const WHATSAPP_LINK = "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0";
+<script>
+  // ====== CONFIG ======
+  const WHATSAPP_LINK = "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0";
 
+  // key untuk simpan produk dalam localStorage
+  const STORAGE_KEY = "affilix_products_v1";
 
-    const products = [
-      {
-        id: 1,
-        name: "ChatGPT Plus 1 Bulan",
-        price: 25,
-        category: "AI Tools",
-        desc: "Fast delivery, guna email sendiri.",
-        img: "https://via.placeholder.com/400x300",
-        badge: "Hot",
-        stock: 10
-      },
-      {
-        id: 2,
-        name: "Canva Pro 1 Bulan",
-        price: 12,
-        category: "Design",
-        desc: "Akses penuh premium untuk design marketing & social media.",
-        img: "https://via.placeholder.com/400x300",
-        badge: "Sale",
-        stock: 8
-      },
-      {
-        id: 3,
-        name: "CapCut Pro",
-        price: 10,
-        category: "Editing",
-        desc: "Unlock semua features untuk editing video TikTok & Reels.",
-        img: "https://via.placeholder.com/400x300",
-        badge: "New",
-        stock: 15
-      },
-      {
-        id: 4,
-        name: "Premiere Pro Preset Pack",
-        price: 19,
-        category: "Editing",
-        desc: "Preset color grading & transition untuk editor video.",
-        img: "https://via.placeholder.com/400x300",
-        badge: "Hot",
-        stock: 7
-      },
-      {
-        id: 5,
-        name: "Bundle Skrip Hook TikTok",
-        price: 15,
-        category: "Copywriting",
-        desc: "100+ skrip hook untuk content short-form.",
-        img: "https://via.placeholder.com/400x300",
-        badge: "Hot",
-        stock: 20
-      }
-    ];
+  // produk default (bila belum ada dalam localStorage)
+  const defaultProducts = [
+    {
+      id: 1,
+      name: "ChatGPT Plus 1 Bulan",
+      price: 25,
+      category: "AI Tools",
+      desc: "Fast delivery, guna email sendiri.",
+      img: "https://via.placeholder.com/400x300",
+      badge: "Hot",
+      stock: 10
+    },
+    {
+      id: 2,
+      name: "Canva Pro 1 Bulan",
+      price: 12,
+      category: "Design",
+      desc: "Akses penuh premium untuk design marketing & social media.",
+      img: "https://via.placeholder.com/400x300",
+      badge: "Sale",
+      stock: 8
+    },
+    {
+      id: 3,
+      name: "CapCut Pro",
+      price: 10,
+      category: "Editing",
+      desc: "Unlock semua features untuk editing video TikTok & Reels.",
+      img: "https://via.placeholder.com/400x300",
+      badge: "New",
+      stock: 15
+    },
+    {
+      id: 4,
+      name: "Premiere Pro Preset Pack",
+      price: 19,
+      category: "Editing",
+      desc: "Preset color grading & transition untuk editor video.",
+      img: "https://via.placeholder.com/400x300",
+      badge: "Hot",
+      stock: 7
+    },
+    {
+      id: 5,
+      name: "Bundle Skrip Hook TikTok",
+      price: 15,
+      category: "Copywriting",
+      desc: "100+ skrip hook untuk content short-form.",
+      img: "https://via.placeholder.com/400x300",
+      badge: "Hot",
+      stock: 20
+    }
+  ];
 
+  let products = [];
+  let filteredCategory = "All";
+  let searchQuery = "";
+  let cart = [];
 
-    let filteredCategory = "All";
-    let searchQuery = "";
-    let cart = [];
+  function loadProductsFromStorage() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        products = JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse products from storage, fallback to default", e);
+        products = defaultProducts;
+      }
+    } else {
+      products = defaultProducts;
+    }
+  }
 
+  // panggil dulu sebelum render UI
+  loadProductsFromStorage();
 
     // Render category buttons
     function renderCategories() {
