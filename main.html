@@ -143,45 +143,275 @@
 </main> <!-- FOOTER --> <footer class="border-t border-slate-800 bg-black/80"> <div class="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-3 items-center justify-between text-xs text-slate-400"> <div class="flex items-center gap-2"> <img src="affilixmedia-logo.png" alt="AFFILIX MEDIA" class="w-6 h-6 object-contain" /> <span>AFFILIX MEDIA · Kedai Produk Digital untuk Creator & Marketer.</span> </div> <div class="flex gap-3"> <span>© <span id="year"></span> AFFILIX MEDIA</span> <span class="hidden sm:inline">|</span> <span>All digital orders via WhatsApp.</span> </div> </div> </footer> <!-- CART DRAWER --> <div id="cartDrawer" class="fixed inset-0 z-50 hidden"> <div class="absolute inset-0 bg-black/60" onclick="closeCart()"></div> <div class="absolute right-0 top-0 h-full w-full max-w-sm glass bg-black/95 border-l border-slate-800 flex flex-col"> <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800"> <h3 class="text-sm font-semibold">Cart AFFILIX MEDIA</h3> <button class="text-xs text-slate-400" onclick="closeCart()">Tutup ✕</button> </div> <div id="cartItems" class="flex-1 overflow-y-auto px-4 py-3 text-sm"></div> <div class="border-t border-slate-800 p-4 space-y-2"> <div class="flex items-center justify-between text-sm"> <span>Total</span> <span id="cartTotal" class="font-semibold text-cyan-300">RM0</span> </div> <button onclick="checkoutWhatsApp()" class="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-black text-sm font-semibold py-2.5 rounded-full hover:scale-[1.02] active:scale-95 transition"> Checkout via WhatsApp </button> <p class="text-[10px] text-slate-400"> Nota: Tiada bayaran dibuat di website ini. Semua transaksi akan disahkan secara terus melalui WhatsApp. </p> </div> </div> </div> <!-- FLOATING WHATSAPP BUTTON -->
 <a id="floatingWA" href="https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0" class="fixed bottom-5 right-4 z-40 rounded-full px-4 py-2 glass border border-emerald-400 shadow-lg flex items-center gap-2 text-xs hover:scale-105 transition"> <span>💬</span> <span>Chat WhatsApp</span> </a>
 
-<!-- MAIN SCRIPT --> <script> "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0"; const STORAGE_KEY = "affilix_products_v1"; const defaultProducts = [ { id: 1, name: "ChatGPT Plus 1 Bulan", price: 25, category: "AI Tools", desc: "Fast delivery, guna email sendiri.", img: "https://via.placeholder.com/600x400?text=ChatGPT+Plus", badge: "Hot", stock: 10 }, { id: 2, name: "Canva Pro 1 Bulan", price: 12, category: "Design", desc: "Akses penuh premium untuk design marketing & social media.", img: "https://via.placeholder.com/600x400?text=Canva+Pro", badge: "Sale", stock: 8 }, { id: 3, name: "CapCut Pro", price: 10, category: "Editing", desc: "Unlock semua features untuk editing video TikTok & Reels.", img: "https://via.placeholder.com/600x400?text=CapCut+Pro", badge: "New", stock: 15 }, { id: 4, name: "Premiere Pro Preset Pack", price: 19, category: "Editing", desc: "Preset color grading & transition untuk editor video.", img: "https://via.placeholder.com/600x400?text=Preset+Pack", badge: "Hot", stock: 7 }, { id: 5, name: "Bundle Skrip Hook TikTok", price: 15, category: "Copywriting", desc: "100+ skrip hook untuk content short-form.", img: "https://via.placeholder.com/600x400?text=Skrip+Hook", badge: "Hot", stock: 20 } ]; let products = []; let filteredCategory = "All"; let searchQuery = ""; let cart = []; // Load products function loadProductsFromStorage() { const saved = localStorage.getItem(STORAGE_KEY); if (saved) { try { products = JSON.parse(saved); } catch { products = defaultProducts.slice(); } } else { products = defaultProducts.slice(); } } // Categories function renderCategories() { const container = document.getElementById("categoryButtons"); const categories = ["All", ...new Set(products.map(p => p.category))]; container.innerHTML = ""; categories.forEach(cat => { const btn = document.createElement("button"); btn.textContent = cat; btn.className = "px-3 py-1 rounded-full text-xs border border-slate-700 glass hover:border-cyan-400 transition" + (filteredCategory === cat ? " bg-cyan-500/20 text-cyan-300 border-cyan-500" : ""); btn.onclick = () => { filteredCategory = cat; renderProducts(); renderCategories(); }; container.appendChild(btn); }); } // Products function renderProducts() { const grid = document.getElementById("productGrid"); grid.innerHTML = ""; const list = products.filter(p => { const byCategory = filteredCategory === "All" || p.category === filteredCategory; const bySearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()); return byCategory && bySearch; }); list.forEach(p => { const card = document.createElement("div"); card.className = "glass rounded-3xl p-4 flex flex-col justify-between bg-grid hover:translate-y-1 hover:shadow-xl transition"; card.innerHTML = ` <div class="mb-3"> <div class="relative mb-3"> <img src="${p.img}" alt="${p.name}" class="w-full h-40 object-cover rounded-2xl" /> ${p.badge ? `<span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-purple-600/80 text-white">${p.badge}</span>` : ""} ${p.stock <= 0 ? `<span class="absolute top-2 right-2 text-[10px] px-2 py-0.5 rounded-full bg-red-600/80 text-white">Sold Out</span>` : ""} </div> <h3 class="text-sm font-semibold mb-1">${p.name}</h3> <p class="text-xs text-slate-300 mb-2">${p.desc}</p> <p class="text-lg font-bold text-cyan-300 mb-1">RM${p.price}</p> <p class="text-[11px] text-slate-400">Kategori: ${p.category} · Stok: ${p.stock}</p> </div> <button ${p.stock <= 0 ? "disabled" : ""} class="mt-3 text-xs font-semibold py-2 rounded-full border border-cyan-500 text-cyan-300 hover:bg-cyan-500 hover:text-black transition disabled:opacity-40 disabled:cursor-not-allowed" onclick="addToCart(${p.id})"> ${p.stock <= 0 ? "Stok Habis" : "Tambah ke Cart"} </button> `; grid.appendChild(card); }); if (list.length === 0) { const empty = document.createElement("p"); empty.className = "text-xs text-slate-400"; empty.textContent = "Tiada produk ditemui. Cuba tukar carian atau kategori."; grid.appendChild(empty); } }
-function addToCart(id) { const product = products.find(p => p.id === id); if (!product || product.stock <= 0) return; const existing = cart.find(item => item.id === id); if (existing) { existing.qty += 1; } else { cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 }); } updateCartUI(); }
+<script>
+  const WHATSAPP_LINK = "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0";
 
-function addHighlightedProduct() { addToCart(1); // id 1 = ChatGPT Plus openCart(); }
+  const STORAGE_KEY = "affilix_products_v1";
 
-function removeFromCart(id) { cart = cart.filter(item => item.id !== id); updateCartUI(); }
+  const defaultProducts = [
+    { id: 1, name: "ChatGPT Plus 1 Bulan", price: 25, category: "AI Tools", desc: "Fast delivery, guna email sendiri.", img: "https://via.placeholder.com/600x400?text=ChatGPT+Plus", badge: "Hot", stock: 10 },
+    { id: 2, name: "Canva Pro 1 Bulan", price: 12, category: "Design", desc: "Akses penuh premium untuk design marketing & social media.", img: "https://via.placeholder.com/600x400?text=Canva+Pro", badge: "Sale", stock: 8 },
+    { id: 3, name: "CapCut Pro", price: 10, category: "Editing", desc: "Unlock semua features untuk editing video TikTok & Reels.", img: "https://via.placeholder.com/600x400?text=CapCut+Pro", badge: "New", stock: 15 },
+    { id: 4, name: "Premiere Pro Preset Pack", price: 19, category: "Editing", desc: "Preset color grading & transition untuk editor video.", img: "https://via.placeholder.com/600x400?text=Preset+Pack", badge: "Hot", stock: 7 },
+    { id: 5, name: "Bundle Skrip Hook TikTok", price: 15, category: "Copywriting", desc: "100+ skrip hook untuk content short-form.", img: "https://via.placeholder.com/600x400?text=Skrip+Hook", badge: "Hot", stock: 20 }
+  ];
 
-function changeQty(id, delta) { const item = cart.find(i => i.id === id); if (!item) return; item.qty += delta; if (item.qty <= 0) { removeFromCart(id); } else { updateCartUI(); } }
+  let products = [];
+  let filteredCategory = "All";
+  let searchQuery = "";
+  let cart = [];
 
-function updateCartUI() { const container = document.getElementById("cartItems"); const countEl = document.getElementById("cartCount"); const totalEl = document.getElementById("cartTotal"); let totalItems = 0; let totalPrice = 0; container.innerHTML = ""; cart.forEach(item => { totalItems += item.qty; totalPrice += item.price * item.qty; const row = document.createElement("div"); row.className = "flex items-center justify-between py-2 border-b border-slate-800"; row.innerHTML =  <div class="mr-2"> <p class="font-medium">${item.name}</p> <p class="text-xs text-slate-400">RM${item.price} × ${item.qty}</p> </div> <div class="flex items-center gap-2"> <button class="px-2 py-1 text-xs rounded-full border border-slate-700 hover:border-cyan-400" onclick="changeQty(${item.id}, -1)">−</button> <button class="px-2 py-1 text-xs rounded-full border border-slate-700 hover:border-cyan-400" onclick="changeQty(${item.id}, 1)">+</button> <button class="px-2 py-1 text-xs rounded-full border border-red-500 text-red-300 hover:bg-red-500 hover:text-black" onclick="removeFromCart(${item.id})">Hapus</button> </div> ; container.appendChild(row); }); countEl.textContent = String(totalItems); totalEl.textContent = "RM" + totalPrice.toFixed(2); }
+  // Load products
+  function loadProductsFromStorage() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        products = JSON.parse(saved);
+      } catch {
+        products = defaultProducts.slice();
+      }
+    } else {
+      products = defaultProducts.slice();
+    }
+  }
 
-function openCart() { document.getElementById("cartDrawer").classList.remove("hidden"); } function closeCart() { document.getElementById("cartDrawer").classList.add("hidden"); }
+  // Categories
+  function renderCategories() {
+    const container = document.getElementById("categoryButtons");
+    const categories = ["All", ...new Set(products.map(p => p.category))];
+    container.innerHTML = "";
+    categories.forEach(cat => {
+      const btn = document.createElement("button");
+      btn.textContent = cat;
+      btn.className =
+        "px-3 py-1 rounded-full text-xs border border-slate-700 glass hover:border-cyan-400 transition" +
+        (filteredCategory === cat ? " bg-cyan-500/20 text-cyan-300 border-cyan-500" : "");
+      btn.onclick = () => {
+        filteredCategory = cat;
+        renderProducts();
+        renderCategories();
+      };
+      container.appendChild(btn);
+    });
+  }
 
-WhatsApp function openWhatsAppDirect() { window.open(WHATSAPP_LINK, "_blank"); } function checkoutWhatsApp() { if (cart.length === 0) { alert("Cart kosong. Sila tambah produk dahulu."); return; } const lines = cart.map(i => • ${i.name} x${i.qty} — RM${(i.price * i.qty).toFixed(2)}); const total = cart.reduce((s, i) => s + i.price * i.qty, 0); const msg = Hai AFFILIX MEDIA! Saya nak checkout produk:\n\n${lines.join("\n")}\n\nTotal: RM${total.toFixed(2)}\n\nSila berikan langkah pembayaran.; const url = WHATSAPP_LINK + "&text=" + encodeURIComponent(msg); window.open(url, "_blank"); }
+  // Products
+  function renderProducts() {
+    const grid = document.getElementById("productGrid");
+    grid.innerHTML = "";
 
- FAQ function toggleFaq(i) { const body = document.getElementById("faqBody" + i); const icon = document.getElementById("faqIcon" + i); const isHidden = body.classList.contains("hidden"); document.querySelectorAll('[id^="faqBody"]').forEach(el => el.classList.add("hidden")); document.querySelectorAll('[id^="faqIcon"]').forEach(el => el.textContent = "+"); if (isHidden) { body.classList.remove("hidden"); icon.textContent = "−"; } }
+    const list = products.filter(p => {
+      const byCategory = filteredCategory === "All" || p.category === filteredCategory;
+      const bySearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return byCategory && bySearch;
+    });
 
- Countdown (24 hours from now) function startCountdown(hours = 24) { const end = Date.now() + hours * 60 * 60 * 1000; const dEl = document.getElementById("cdDays"); const hEl = document.getElementById("cdHours"); const mEl = document.getElementById("cdMinutes"); const sEl = document.getElementById("cdSeconds"); function tick() { const diff = Math.max(0, end - Date.now()); const s = Math.floor(diff / 1000); const days = Math.floor(s / 86400); const hours = Math.floor((s % 86400) / 3600); const mins = Math.floor((s % 3600) / 60); const secs = s % 60; dEl.textContent = String(days).padStart(2, "0"); hEl.textContent = String(hours).padStart(2, "0"); mEl.textContent = String(mins).padStart(2, "0"); sEl.textContent = String(secs).padStart(2, "0"); } tick(); setInterval(tick, 1000); }
+    list.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "glass rounded-3xl p-4 flex flex-col justify-between bg-grid hover:translate-y-1 hover:shadow-xl transition";
+      card.innerHTML = `
+        <div class="mb-3">
+          <div class="relative mb-3">
+            <img src="${p.img}" alt="${p.name}" class="w-full h-40 object-cover rounded-2xl" />
+            ${p.badge ? `<span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-purple-600/80 text-white">${p.badge}</span>` : ""}
+            ${p.stock <= 0 ? `<span class="absolute top-2 right-2 text-[10px] px-2 py-0.5 rounded-full bg-red-600/80 text-white">Sold Out</span>` : ""}
+          </div>
+          <h3 class="text-sm font-semibold mb-1">${p.name}</h3>
+          <p class="text-xs text-slate-300 mb-2">${p.desc}</p>
+          <p class="text-lg font-bold text-cyan-300 mb-1">RM${p.price}</p>
+          <p class="text-[11px] text-slate-400">Kategori: ${p.category} · Stok: ${p.stock}</p>
+        </div>
+        <button
+          ${p.stock <= 0 ? "disabled" : ""}
+          class="mt-3 text-xs font-semibold py-2 rounded-full border border-cyan-500 text-cyan-300 hover:bg-cyan-500 hover:text-black transition disabled:opacity-40 disabled:cursor-not-allowed"
+          onclick="addToCart(${p.id})"
+        >
+          ${p.stock <= 0 ? "Stok Habis" : "Tambah ke Cart"}
+        </button>
+      `;
+      grid.appendChild(card);
+    });
 
- Init document.addEventListener("DOMContentLoaded", () => {  year const y = document.getElementById("year"); if (y) y.textContent = new Date().getFullYear().toString();
+    if (list.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "text-xs text-slate-400";
+      empty.textContent = "Tiada produk ditemui. Cuba tukar carian atau kategori.";
+      grid.appendChild(empty);
+    }
+  }
 
-// data
-loadProductsFromStorage();
-renderCategories();
-renderProducts();
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    if (!product || product.stock <= 0) return;
 
-// search
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("input", e => {
-  searchQuery = e.target.value || "";
-  renderProducts();
-});
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
+    }
+    updateCartUI();
+  }
 
-// countdown
-startCountdown(24);
+  function addHighlightedProduct() {
+    addToCart(1); // id 1 = ChatGPT Plus
+    openCart();
+  }
 
-// cart init
-updateCartUI();
-}); </script>
+  function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    updateCartUI();
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+      removeFromCart(id);
+    } else {
+      updateCartUI();
+    }
+  }
+
+  function updateCartUI() {
+    const container = document.getElementById("cartItems");
+    const countEl = document.getElementById("cartCount");
+    const totalEl = document.getElementById("cartTotal");
+
+    let totalItems = 0;
+    let totalPrice = 0;
+    container.innerHTML = "";
+
+    cart.forEach(item => {
+      totalItems += item.qty;
+      totalPrice += item.price * item.qty;
+
+      const row = document.createElement("div");
+      row.className = "flex items-center justify-between py-2 border-b border-slate-800";
+      row.innerHTML = `
+        <div class="mr-2">
+          <p class="font-medium">${item.name}</p>
+          <p class="text-xs text-slate-400">RM${item.price} × ${item.qty}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="px-2 py-1 text-xs rounded-full border border-slate-700 hover:border-cyan-400" onclick="changeQty(${item.id}, -1)">−</button>
+          <button class="px-2 py-1 text-xs rounded-full border border-slate-700 hover:border-cyan-400" onclick="changeQty(${item.id}, 1)">+</button>
+          <button class="px-2 py-1 text-xs rounded-full border border-red-500 text-red-300 hover:bg-red-500 hover:text-black" onclick="removeFromCart(${item.id})">Hapus</button>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+
+    countEl.textContent = String(totalItems);
+    totalEl.textContent = "RM" + totalPrice.toFixed(2);
+  }
+
+  function openCart() {
+    document.getElementById("cartDrawer").classList.remove("hidden");
+  }
+
+  function closeCart() {
+    document.getElementById("cartDrawer").classList.add("hidden");
+  }
+
+  // WhatsApp
+  function openWhatsAppDirect() {
+    window.open(WHATSAPP_LINK, "_blank");
+  }
+
+  function checkoutWhatsApp() {
+    if (cart.length === 0) {
+      alert("Cart kosong. Sila tambah produk dahulu.");
+      return;
+    }
+
+    const lines = cart.map(
+      i => `• ${i.name} x${i.qty} — RM${(i.price * i.qty).toFixed(2)}`
+    );
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+    const msg = `Hai AFFILIX MEDIA! Saya nak checkout produk:\n\n${lines.join(
+      "\n"
+    )}\n\nTotal: RM${total.toFixed(
+      2
+    )}\n\nSila berikan langkah pembayaran.`;
+
+    const url = WHATSAPP_LINK + "&text=" + encodeURIComponent(msg);
+    window.open(url, "_blank");
+  }
+
+  // FAQ
+  function toggleFaq(i) {
+    const body = document.getElementById("faqBody" + i);
+    const icon = document.getElementById("faqIcon" + i);
+    const isHidden = body.classList.contains("hidden");
+
+    document.querySelectorAll('[id^="faqBody"]').forEach(el =>
+      el.classList.add("hidden")
+    );
+    document.querySelectorAll('[id^="faqIcon"]').forEach(el => (el.textContent = "+"));
+
+    if (isHidden) {
+      body.classList.remove("hidden");
+      icon.textContent = "−";
+    }
+  }
+
+  // Countdown (24 hours from now)
+  function startCountdown(hours = 24) {
+    const end = Date.now() + hours * 60 * 60 * 1000;
+    const dEl = document.getElementById("cdDays");
+    const hEl = document.getElementById("cdHours");
+    const mEl = document.getElementById("cdMinutes");
+    const sEl = document.getElementById("cdSeconds");
+
+    function tick() {
+      const diff = Math.max(0, end - Date.now());
+      const s = Math.floor(diff / 1000);
+      const days = Math.floor(s / 86400);
+      const hours = Math.floor((s % 86400) / 3600);
+      const mins = Math.floor((s % 3600) / 60);
+      const secs = s % 60;
+
+      dEl.textContent = String(days).padStart(2, "0");
+      hEl.textContent = String(hours).padStart(2, "0");
+      mEl.textContent = String(mins).padStart(2, "0");
+      sEl.textContent = String(secs).padStart(2, "0");
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  // Init
+  document.addEventListener("DOMContentLoaded", () => {
+    // year
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear().toString();
+
+    // data
+    loadProductsFromStorage();
+    renderCategories();
+    renderProducts();
+
+    // search
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", e => {
+        searchQuery = e.target.value || "";
+        renderProducts();
+      });
+    }
+
+    // countdown
+    startCountdown(24);
+
+    // cart init
+    updateCartUI();
+  });
+</script>
+
 
 </body> </html>
   <div id="productGrid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></d
