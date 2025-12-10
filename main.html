@@ -13,16 +13,19 @@
 
   <style>
     :root {
-      --color-bg: #050816;
-      --color-surface: #070b18;
-      --color-surface-soft: #0b1120;
-      --color-border-subtle: rgba(148, 163, 184, 0.35);
-      --color-accent: #22d3ee;
-      --color-accent-soft: #67e8f9;
-      --color-accent-secondary: #6366f1;
-      --color-text-main: #e5e7eb;
-      --color-text-muted: #9ca3af;
-      --radius-lg: 1.5rem;
+      --bg-main: #030014;
+      --bg-elevated: #07051b;
+      --bg-soft: #0d0b23;
+      --glass: rgba(15, 23, 42, 0.85);
+      --border-subtle: rgba(148, 163, 184, 0.35);
+      --accent: #f97316;
+      --accent-soft: #fb923c;
+      --accent-alt: #22d3ee;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --radius-lg: 1.4rem;
+      --radius-xl: 1.8rem;
+      --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.8);
     }
 
     * {
@@ -31,32 +34,44 @@
 
     body {
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.16), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.2), transparent 55%),
-        linear-gradient(135deg, #020617 0%, #020617 40%, #020617 100%);
-      color: var(--color-text-main);
+      margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.15), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(96, 165, 250, 0.22), transparent 55%),
+        linear-gradient(145deg, #020617 0%, #020617 40%, #020617 100%);
+      color: var(--text-main);
       overflow-x: hidden;
     }
 
-    /* Top glass navbar */
+    .bg-grid {
+      background-image: radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.24) 1px, transparent 0);
+      background-size: 30px 30px;
+      opacity: 0.18;
+    }
+
+    /* ===== TOP NAV ===== */
+
     .navbar-main {
-      background: rgba(5, 8, 22, 0.92);
+      background: radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.09), transparent 55%)
+        ,radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.12), transparent 55%)
+        ,rgba(15, 23, 42, 0.89);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(30, 64, 175, 0.6);
+      border-bottom: 1px solid rgba(55, 65, 81, 0.7);
     }
 
     .navbar-brand-mark {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at 30% 20%, rgba(34, 211, 238, 0.5), transparent 55%),
-                  radial-gradient(circle at 80% 80%, rgba(129, 140, 248, 0.6), transparent 55%);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background:
+        radial-gradient(circle at 25% 10%, rgba(248, 113, 113, 0.7), transparent 55%),
+        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.7), transparent 55%);
       display: grid;
       place-items: center;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.8);
     }
 
     .navbar-brand-mark img {
@@ -66,134 +81,157 @@
     }
 
     .nav-link {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--color-text-muted) !important;
+      color: var(--text-muted) !important;
+      position: relative;
+      padding-bottom: 0.2rem;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.3rem;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+      transition: width 0.2s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
     }
 
     .nav-link.active,
     .nav-link:hover {
-      color: var(--color-accent) !important;
+      color: var(--accent-soft) !important;
     }
 
-    /* Layout utilities */
-    .section {
-      padding-top: 4.5rem;
-      padding-bottom: 4rem;
+    .cart-pill {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.24), transparent 55%)
+        ,rgba(15, 23, 42, 0.92);
+      font-size: 0.8rem;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
     }
 
-    .section-header-eyebrow {
-      font-size: 0.7rem;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      color: var(--color-accent-soft);
+    .cart-pill span:first-child {
+      font-size: 1.05rem;
     }
 
-    .section-header-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-    }
+    /* ===== GENERIC SURFACES ===== */
 
     .surface {
-      background: var(--color-surface);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--color-border-subtle);
-      box-shadow:
-        0 24px 60px rgba(15, 23, 42, 0.85),
-        0 0 0 1px rgba(15, 23, 42, 0.9) inset;
+      background: radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.16), transparent 60%)
+        ,radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.16), transparent 60%)
+        ,rgba(15, 23, 42, 0.96);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(75, 85, 99, 0.8);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .surface::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(120deg, rgba(248, 250, 252, 0.12), transparent 40%, transparent);
+      opacity: 0.32;
+      pointer-events: none;
+    }
+
+    .surface-inner {
+      position: relative;
+      z-index: 1;
     }
 
     .surface-soft {
-      background: var(--color-surface-soft);
+      background: rgba(15, 23, 42, 0.96);
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(51, 65, 85, 0.8);
-    }
-
-    .bg-grid {
-      background-image: radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.12) 1px, transparent 0);
-      background-size: 26px 26px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.9);
     }
 
     .pill {
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      padding: 0.35rem 0.9rem;
+      padding: 0.28rem 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
       font-size: 0.7rem;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      color: var(--color-text-muted);
-      background: radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.18), transparent 60%);
+      gap: 0.35rem;
+      color: var(--text-muted);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.25), transparent 60%)
+        ,rgba(15, 23, 42, 0.9);
+    }
+
+    .section {
+      padding-top: 5rem;
+      padding-bottom: 4.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--accent-alt);
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .text-muted-soft {
+      font-size: 0.88rem;
+      color: var(--text-muted);
     }
 
     .badge-soft {
       border-radius: 999px;
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      background: rgba(8, 47, 73, 0.7);
-      padding: 0.25rem 0.7rem;
-      font-size: 0.7rem;
-      color: var(--color-accent-soft);
+      border: 1px solid rgba(248, 113, 113, 0.7);
+      background: rgba(127, 29, 29, 0.85);
+      font-size: 0.72rem;
+      padding: 0.18rem 0.7rem;
+      color: #fee2e2;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .badge-soft-alt {
       border-radius: 999px;
-      border: 1px solid rgba(248, 250, 252, 0.2);
-      background: rgba(15, 23, 42, 0.9);
-      padding: 0.25rem 0.7rem;
-      font-size: 0.7rem;
-      color: var(--color-text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.92);
+      font-size: 0.72rem;
+      padding: 0.18rem 0.7rem;
+      color: var(--text-muted);
     }
 
-    .text-muted-soft {
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
+    /* ===== HERO ===== */
+
+    .hero-wrap {
+      margin-top: 1.5rem;
     }
 
-    /* Main CTA button */
-    .btn-main {
-      background: linear-gradient(135deg, #22d3ee, #6366f1);
-      border: none;
-      color: #020617;
-      border-radius: 999px;
-      padding-inline: 1.4rem;
-      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.6);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-weight: 600;
-      font-size: 0.85rem;
-      transform: translateY(0);
-      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
-    }
-
-    .btn-main:hover {
-      filter: brightness(1.07);
-      transform: translateY(-1px);
-      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.8);
-      color: #020617;
-    }
-
-    .btn-main:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.95);
-    }
-
-    .btn-outline-chip {
-      border-radius: 999px;
-      font-size: 0.75rem;
-      padding: 0.25rem 0.9rem;
-    }
-
-    /* Hero area */
     .hero-title {
-      font-size: clamp(2.1rem, 3.6vw, 3.4rem);
-      font-weight: 700;
+      font-size: clamp(2.3rem, 4vw, 3.4rem);
+      font-weight: 800;
       line-height: 1.1;
+      letter-spacing: -0.03em;
     }
 
     .hero-highlight {
-      background: linear-gradient(120deg, #22d3ee, #a855f7, #4ade80);
+      background: linear-gradient(120deg, #f97316, #facc15, #22d3ee);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -203,157 +241,330 @@
       max-width: 32rem;
     }
 
-    .hero-metric {
-      border-radius: 1.5rem;
-      background: radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.25), transparent 65%);
-      border: 1px solid rgba(52, 211, 153, 0.5);
-      padding: 0.6rem 0.9rem;
-      font-size: 0.8rem;
+    .hero-cta {
+      background: linear-gradient(120deg, #f97316, #fb923c);
+      border-radius: 999px;
+      border: none;
+      color: #030712;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 0.65rem 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 18px 40px rgba(248, 113, 113, 0.7);
+      transform: translateY(0);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
     }
 
-    /* Product highlight card */
-    .highlight-card {
-      position: relative;
-      overflow: hidden;
+    .hero-cta span:first-child {
+      font-size: 1.05rem;
     }
 
-    .highlight-card::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      pointer-events: none;
+    .hero-cta:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+      box-shadow: 0 22px 45px rgba(248, 113, 113, 0.85);
+      color: #020617;
+    }
+
+    .hero-cta:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.95);
+    }
+
+    .hero-chip {
+      font-size: 0.78rem;
+      color: var(--accent-alt);
+    }
+
+    .hero-stat {
+      border-radius: 1.2rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
       background:
-        radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.35), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.4), transparent 55%);
-      opacity: 0.7;
+        radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.35), transparent 60%),
+        rgba(15, 23, 42, 0.96);
+      padding: 0.7rem 0.9rem;
+      font-size: 0.78rem;
     }
 
-    .highlight-card-inner {
-      position: relative;
-      z-index: 2;
+    .hero-stat strong {
+      font-size: 0.9rem;
+    }
+
+    .hero-right-card {
+      min-height: 320px;
+    }
+
+    .highlight-price-main {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: var(--accent-alt);
+      letter-spacing: -0.03em;
     }
 
     .highlight-price-old {
-      text-decoration: line-through;
       font-size: 0.8rem;
-      color: var(--color-text-muted);
+      text-decoration: line-through;
+      color: var(--text-muted);
     }
 
-    .highlight-price-new {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--color-accent-soft);
+    /* ===== PRODUCT SECTION ===== */
+
+    .filter-chips {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 0.2rem;
     }
 
-    /* Product cards */
+    .filter-chip-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.75rem;
+      padding: 0.28rem 0.8rem;
+      margin-right: 0.35rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-muted);
+      transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+    }
+
+    .filter-chip-btn.active {
+      background: linear-gradient(120deg, #f97316, #fb923c);
+      border-color: rgba(248, 250, 252, 0.9);
+      color: #020617;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(248, 113, 113, 0.6);
+    }
+
+    .search-box {
+      border-radius: 999px;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.8rem;
+      padding-left: 2.2rem;
+      color: var(--text-main);
+    }
+
+    .search-box::placeholder {
+      color: rgba(148, 163, 184, 0.65);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
     .product-card {
-      border-radius: 1.25rem;
-      border: 1px solid rgba(30, 64, 175, 0.4);
-      background: radial-gradient(circle at 0% 0%, rgba(30, 64, 175, 0.6), transparent 60%),
-                  radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.9), #020617);
+      border-radius: 1.3rem;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.22), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 1), rgba(15, 23, 42, 1));
       overflow: hidden;
       position: relative;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.95);
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 1);
-      border-color: rgba(56, 189, 248, 0.85);
+      transform: translateY(-4px) translateZ(0);
+      border-color: rgba(248, 113, 113, 0.9);
+      box-shadow: 0 26px 60px rgba(15, 23, 42, 1);
     }
 
     .product-card-img {
-      height: 155px;
+      position: relative;
+      height: 160px;
       overflow: hidden;
-      border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid rgba(15, 23, 42, 1);
     }
 
     .product-card-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(1.02);
+      transform: scale(1.04);
       transition: transform 0.3s ease;
     }
 
     .product-card:hover .product-card-img img {
-      transform: scale(1.06);
+      transform: scale(1.08);
     }
 
     .product-chip {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.92);
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      padding: 0.15rem 0.5rem;
-      color: var(--color-text-muted);
+      padding: 0.15rem 0.55rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-muted);
     }
 
-    /* Testimonial */
+    .btn-outline-soft {
+      border-radius: 999px;
+      font-size: 0.78rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid rgba(56, 189, 248, 0.8);
+      color: var(--accent-alt);
+      background: transparent;
+    }
+
+    .btn-outline-soft:hover {
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--accent-alt);
+      border-color: rgba(248, 250, 252, 0.9);
+    }
+
+    .btn-disabled-soft {
+      border-radius: 999px;
+      font-size: 0.78rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: rgba(148, 163, 184, 0.7);
+      cursor: not-allowed;
+    }
+
+    /* ===== TESTIMONIAL ===== */
+
+    .testimonial-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
     .testimonial-quote {
       position: relative;
       padding-left: 2.2rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
     }
 
     .testimonial-quote::before {
       content: "“";
       position: absolute;
       left: 0.35rem;
-      top: -0.6rem;
-      font-size: 2.2rem;
+      top: -0.8rem;
+      font-size: 2.5rem;
       color: rgba(148, 163, 184, 0.4);
     }
 
-    /* FAQ accordion */
-    .accordion-button {
-      border-radius: 0.9rem !important;
-      background: rgba(15, 23, 42, 0.95);
-      color: var(--color-text-main);
-      font-size: 0.85rem;
-    }
+    /* ===== FAQ ===== */
 
     .accordion-item {
       border-radius: 1rem !important;
+      border: 1px solid rgba(55, 65, 81, 0.9) !important;
       overflow: hidden;
-      border: 1px solid rgba(51, 65, 85, 0.7) !important;
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(15, 23, 42, 0.96);
+      box-shadow: 0 18px 30px rgba(15, 23, 42, 0.9);
+    }
+
+    .accordion-button {
+      border-radius: 0.8rem !important;
+      font-size: 0.86rem;
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-main);
     }
 
     .accordion-button:not(.collapsed) {
-      color: var(--color-accent-soft);
-      background: radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.22), transparent 60%);
+      color: var(--accent-alt);
+      background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.25), transparent 60%);
       box-shadow: none;
     }
 
-    /* Cart offcanvas */
-    .offcanvas-dark {
-      background: radial-gradient(circle at 0% 0%, #0b1120, #020617 55%);
-      border-left: 1px solid rgba(30, 64, 175, 0.7);
+    .accordion-body {
+      font-size: 0.86rem;
+      color: var(--text-muted);
     }
 
-    /* Floating WhatsApp button */
+    /* ===== OFFCANVAS (CART) ===== */
+
+    .offcanvas-dark {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.2), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.3), transparent 55%),
+        rgba(15, 23, 42, 0.98);
+      border-left: 1px solid rgba(75, 85, 99, 0.9);
+    }
+
+    .checkout-btn {
+      border-radius: 999px;
+      background: linear-gradient(120deg, #22c55e, #4ade80);
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #022c22;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.2rem;
+      box-shadow: 0 16px 36px rgba(22, 163, 74, 0.6);
+    }
+
+    .checkout-btn span:first-child {
+      font-size: 1rem;
+    }
+
+    /* ===== FLOATING WHATSAPP ===== */
+
     .floating-wa {
       position: fixed;
-      right: 1.25rem;
-      bottom: 1.5rem;
+      right: 1.3rem;
+      bottom: 1.7rem;
       z-index: 1055;
       border-radius: 999px;
-      padding-inline: 1rem;
-      box-shadow: 0 16px 30px rgba(22, 163, 74, 0.7);
+      padding-inline: 1.1rem;
+      padding-block: 0.5rem;
+      font-size: 0.82rem;
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      font-size: 0.82rem;
+      gap: 0.5rem;
+      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.8);
       transform: translateY(0);
       transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
     .floating-wa:hover {
       transform: translateY(-2px);
-      box-shadow: 0 20px 40px rgba(22, 163, 74, 0.9);
+      box-shadow: 0 22px 52px rgba(22, 163, 74, 0.95);
     }
 
-    /* Scroll animations */
+    /* ===== COUNTDOWN STRIP ===== */
+
+    .countdown-strip {
+      border-radius: 1.3rem;
+      border: 1px dashed rgba(248, 113, 113, 0.7);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.28), transparent 60%),
+        rgba(15, 23, 42, 0.95);
+      font-size: 0.78rem;
+    }
+
+    .cd-unit {
+      min-width: 56px;
+    }
+
+    .cd-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent-alt);
+    }
+
+    .cd-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+
     .animate-on-scroll {
       opacity: 0;
       transform: translateY(18px);
@@ -369,13 +580,31 @@
     .animate-on-scroll.delay-2 { transition-delay: 0.2s; }
     .animate-on-scroll.delay-3 { transition-delay: 0.3s; }
 
-    /* Responsive tweaks */
-    @media (max-width: 575.98px) {
-      .floating-wa {
-        right: 1rem;
-        bottom: 1rem;
+    /* ===== FOOTER ===== */
+
+    footer {
+      border-top: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at 50% 0%, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 1));
+    }
+
+    /* ===== RESPONSIVE ===== */
+
+    @media (max-width: 767.98px) {
+      .hero-wrap {
+        margin-top: 1rem;
       }
 
+      .surface {
+        border-radius: 1.5rem;
+      }
+
+      .floating-wa {
+        right: 1rem;
+        bottom: 1.2rem;
+      }
+    }
+
+    @media (max-width: 575.98px) {
       .hero-title {
         font-size: 2.1rem;
       }
@@ -383,6 +612,9 @@
   </style>
 </head>
 <body>
+  <!-- BACKGROUND GRID LAYER -->
+  <div class="bg-grid position-fixed top-0 start-0 w-100 h-100 pointer-events-none"></div>
+
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark navbar-main fixed-top">
     <div class="container">
@@ -391,8 +623,8 @@
           <img src="affilixmedia-logo.png" alt="AFFILIX MEDIA" />
         </div>
         <div class="lh-1">
-          <div class="text-uppercase text-light" style="letter-spacing: 0.16em; font-size: 0.65rem;">AFFILIX MEDIA</div>
-          <div class="text-muted" style="font-size: 0.68rem;">Digital Product Store</div>
+          <div class="text-uppercase text-light" style="letter-spacing: 0.18em; font-size: 0.65rem;">AFFILIX MEDIA</div>
+          <div class="text-muted" style="font-size: 0.7rem;">Digital Store for Creator &amp; Marketer</div>
         </div>
       </a>
 
@@ -411,15 +643,15 @@
         <!-- Cart button -->
         <button
           id="cartButton"
-          class="btn btn-outline-info btn-sm position-relative rounded-pill d-flex align-items-center gap-1 px-3"
+          class="btn btn-sm text-light cart-pill d-flex align-items-center gap-2 px-3"
           type="button"
           onclick="openCart()"
         >
-          <span class="fs-6">🛒</span>
+          <span>🛒</span>
           <span>Cart</span>
           <span
             id="cartCount"
-            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info text-dark"
+            class="badge rounded-pill bg-light text-dark ms-1"
             style="font-size: 0.65rem;"
           >0</span>
         </button>
@@ -431,137 +663,129 @@
   <main class="pt-5">
     <!-- HERO -->
     <section id="home" class="section">
-      <div class="container">
-        <div class="row g-4 align-items-center">
-          <!-- Left: Hero copy -->
+      <div class="container hero-wrap">
+        <div class="row g-4 align-items-stretch">
+          <!-- LEFT -->
           <div class="col-lg-6 animate-on-scroll">
             <div class="mb-3">
               <span class="pill">
-                <span style="font-size: 0.9rem;">●</span>
+                <span style="font-size: 0.95rem;">●</span>
                 Kedai Produk Digital Malaysia
               </span>
             </div>
-            <p class="section-header-eyebrow mb-2">
-              AFFILIX MEDIA
-            </p>
+            <p class="section-eyebrow mb-2">AFFILIX MEDIA</p>
             <h1 class="hero-title mb-3">
-              Satu <span class="hero-highlight">kedai digital</span><br />
+              Satu <span class="hero-highlight">hub langganan digital</span><br />
               untuk semua tools kerja online anda.
             </h1>
-            <p class="hero-subtitle text-muted-soft mb-3">
-              Topup ChatGPT Plus, Canva Pro, CapCut Pro &amp; lain-lain – senang untuk creator, freelancer dan marketer.
-              Pilih produk, tambah ke cart, dan checkout terus ke WhatsApp.
+            <p class="hero-subtitle text-muted-soft mb-4">
+              Topup ChatGPT Plus, Canva Pro, CapCut Pro &amp; lain-lain – siap untuk creator, freelancer dan
+              marketer yang nak jalan kerja laju tanpa pening setup akaun.
             </p>
 
             <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
-              <button
-                onclick="openWhatsAppDirect()"
-                class="btn-main"
-              >
+              <button onclick="openWhatsAppDirect()" class="hero-cta">
                 <span>⚡</span>
                 <span>Beli Terus di WhatsApp</span>
               </button>
-              <span class="badge-soft">
-                Promo batch terhad hari ini
-              </span>
+              <span class="badge-soft hero-chip">Batch promo hari ini sahaja</span>
             </div>
 
             <div class="d-flex flex-wrap gap-2 mb-4">
-              <div class="hero-metric d-flex align-items-center gap-2">
+              <div class="hero-stat d-flex align-items-center gap-2">
                 <span>👥</span>
                 <div>
-                  <div style="font-size: 0.78rem;">100+ pelanggan / bulan</div>
-                  <div class="text-muted" style="font-size: 0.7rem;">Creator, agency, SME &amp; student</div>
+                  <strong>100+ pelanggan / bulan</strong><br />
+                  <span class="text-muted-soft">Creator, agency, SME &amp; student</span>
                 </div>
               </div>
-              <div class="hero-metric d-flex align-items-center gap-2" style="border-color: rgba(56,189,248,0.45);">
-                <span>✅</span>
+              <div class="hero-stat d-flex align-items-center gap-2">
+                <span>⚙️</span>
                 <div>
-                  <div style="font-size: 0.78rem;">Akses cepat &amp; support</div>
-                  <div class="text-muted" style="font-size: 0.7rem;">Order dalam ~1–10 minit</div>
+                  <strong>Akses cepat &amp; support</strong><br />
+                  <span class="text-muted-soft">Order dalam ~1–10 minit</span>
                 </div>
               </div>
             </div>
 
             <!-- Countdown -->
-            <div class="surface-soft bg-grid p-3 d-flex align-items-center gap-3" style="max-width: 420px;">
-              <div>
+            <div class="countdown-strip p-3 d-flex flex-column flex-md-row align-items-md-center gap-3">
+              <div class="flex-grow-1">
                 <p class="text-uppercase text-muted mb-1" style="letter-spacing: 0.18em; font-size: 0.65rem;">
-                  Promo Tamat Dalam
+                  Promo batch semasa
                 </p>
-                <div id="countdown" class="d-flex gap-3 text-center small">
-                  <div>
-                    <div id="cdDays" class="h4 mb-0 text-info">00</div>
-                    <div class="text-muted" style="font-size: 0.7rem;">Hari</div>
-                  </div>
-                  <div>
-                    <div id="cdHours" class="h4 mb-0 text-info">00</div>
-                    <div class="text-muted" style="font-size: 0.7rem;">Jam</div>
-                  </div>
-                  <div>
-                    <div id="cdMinutes" class="h4 mb-0 text-info">00</div>
-                    <div class="text-muted" style="font-size: 0.7rem;">Minit</div>
-                  </div>
-                  <div>
-                    <div id="cdSeconds" class="h4 mb-0 text-info">00</div>
-                    <div class="text-muted" style="font-size: 0.7rem;">Saat</div>
-                  </div>
+                <p class="mb-0 text-muted-soft">
+                  Harga special hanya untuk timer ini. Lepas tamat, slot baru mungkin berbeza harga.
+                </p>
+              </div>
+              <div id="countdown" class="d-flex gap-3 text-center small">
+                <div class="cd-unit">
+                  <div id="cdDays" class="cd-value">00</div>
+                  <div class="cd-label">Hari</div>
+                </div>
+                <div class="cd-unit">
+                  <div id="cdHours" class="cd-value">00</div>
+                  <div class="cd-label">Jam</div>
+                </div>
+                <div class="cd-unit">
+                  <div id="cdMinutes" class="cd-value">00</div>
+                  <div class="cd-label">Minit</div>
+                </div>
+                <div class="cd-unit">
+                  <div id="cdSeconds" class="cd-value">00</div>
+                  <div class="cd-label">Saat</div>
                 </div>
               </div>
-              <p class="text-muted-soft mb-0" style="font-size: 0.76rem;">
-                Harga promo hanya untuk batch ini. Lepas timer tamat, harga mungkin berubah.
-              </p>
             </div>
           </div>
 
-          <!-- Right: Highlight product -->
-          <div class="col-lg-6 animate-on-scroll delay-2">
-            <div class="surface highlight-card bg-grid p-4">
-              <div class="highlight-card-inner">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <div class="badge-soft-alt d-flex align-items-center gap-1">
-                    <span style="font-size: 0.85rem;">🔥</span>
-                    <span>Produk Paling Laju Terjual</span>
-                  </div>
-                  <span class="text-muted" style="font-size: 0.7rem;">
-                    Batch hari ini
+          <!-- RIGHT HIGHLIGHT PRODUCT -->
+          <div class="col-lg-6 animate-on-scroll delay-1">
+            <div class="surface hero-right-card h-100">
+              <div class="surface-inner h-100 d-flex flex-column p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge-soft-alt d-flex align-items-center gap-1">
+                    <span>🔥</span> Produk Paling Laju Terjual
                   </span>
+                  <span class="text-muted" style="font-size: 0.78rem;">Batch hari ini</span>
                 </div>
+
                 <h2 class="h5 mb-1">ChatGPT Plus 1 Bulan</h2>
                 <p class="text-muted-soft mb-3">
-                  Unlock AI premium: lebih laju, stabil &amp; pintar untuk kerja research, content dan automasi bisnes anda.
+                  Unlock AI premium: lebih laju, stabil &amp; pintar untuk research, content dan automasi bisnes anda.
+                  Guna email sendiri, sesuai untuk creator &amp; business owner.
                 </p>
 
                 <div class="d-flex justify-content-between align-items-end mb-3">
                   <div>
                     <div class="highlight-price-old">RM83+</div>
-                    <div class="highlight-price-new">RM25</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">
+                    <div class="highlight-price-main">RM25</div>
+                    <div class="text-muted" style="font-size: 0.78rem;">
                       Guna email sendiri · Fast delivery
                     </div>
                   </div>
                   <div class="text-end">
-                    <div class="badge-soft mb-1">
-                      ✅ Trusted Seller
-                    </div>
+                    <div class="badge-soft mb-1">✅ Trusted Seller</div>
                     <div class="badge-soft-alt">
-                      ⚠ Slot terhad untuk batch ini
+                      ⚠ Slot terhad · Batch terkini
                     </div>
                   </div>
                 </div>
 
-                <button
-                  class="btn btn-info w-100 btn-sm fw-semibold rounded-pill mb-2"
-                  onclick="addHighlightedProduct()"
-                >
-                  Tambah ke Cart
-                </button>
-                <button
-                  class="btn btn-link w-100 p-0 text-info small"
-                  onclick="openCart()"
-                >
-                  Lihat Cart &amp; Checkout via WhatsApp
-                </button>
+                <div class="mt-auto">
+                  <button
+                    class="btn btn-warning w-100 btn-sm fw-semibold rounded-pill mb-2"
+                    onclick="addHighlightedProduct()"
+                  >
+                    Tambah ke Cart
+                  </button>
+                  <button
+                    class="btn btn-link w-100 p-0 text-decoration-none text-muted-soft small"
+                    onclick="openCart()"
+                  >
+                    Lihat Cart &amp; Checkout via WhatsApp →
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -572,42 +796,51 @@
     <!-- PRODUK SECTION -->
     <section id="produk" class="section">
       <div class="container">
-        <div class="d-flex flex-column flex-lg-row align-items-lg-end justify-content-between gap-3 mb-3 animate-on-scroll">
-          <div>
-            <p class="section-header-eyebrow mb-1">Produk</p>
-            <h2 class="section-header-title mb-1">Senarai Produk Digital</h2>
+        <div class="row g-4 align-items-end mb-3 animate-on-scroll">
+          <div class="col-lg-6">
+            <p class="section-eyebrow mb-1">Produk</p>
+            <h2 class="section-title mb-2">Senarai Produk Digital</h2>
             <p class="text-muted-soft mb-0">
-              Pilih beberapa produk, tambah ke cart dan sekali checkout di WhatsApp.
+              Pilih beberapa produk, tambah ke cart, dan sekali checkout terus ke WhatsApp. Senang untuk urus
+              langganan team &amp; client.
             </p>
           </div>
-          <div class="d-flex align-items-center gap-2">
-            <input
-              id="searchInput"
-              type="text"
-              class="form-control form-control-sm bg-dark text-light border-secondary"
-              placeholder="Cari produk (contoh: ChatGPT, Canva)..."
-              style="width: min(280px, 75vw);"
-            />
+          <div class="col-lg-6">
+            <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2">
+              <div class="position-relative flex-grow-1">
+                <span class="search-icon">🔎</span>
+                <input
+                  id="searchInput"
+                  type="text"
+                  class="form-control form-control-sm search-box"
+                  placeholder="Cari produk (contoh: ChatGPT, Canva, CapCut)..."
+                />
+              </div>
+              <span class="badge-soft-alt small">
+                Tip: boleh mix produk &amp; checkout sekali
+              </span>
+            </div>
           </div>
         </div>
 
         <!-- Category filters -->
-        <div id="categoryButtons" class="mb-3 animate-on-scroll delay-1"></div>
+        <div id="categoryButtons" class="filter-chips mb-3 animate-on-scroll delay-1"></div>
 
         <!-- Products -->
         <div id="productGrid" class="row g-3 animate-on-scroll delay-2"></div>
       </div>
     </section>
 
-    <!-- TESTIMONI -->
+    <!-- TESTIMONI SECTION -->
     <section id="testimoni" class="section">
       <div class="container">
         <div class="row g-4 align-items-start">
           <div class="col-md-5 animate-on-scroll">
-            <p class="section-header-eyebrow mb-1">Social Proof</p>
-            <h2 class="section-header-title mb-2">Apa pelanggan cakap?</h2>
+            <p class="section-eyebrow mb-1">Social Proof</p>
+            <h2 class="section-title mb-2">Apa pelanggan cakap?</h2>
             <p class="text-muted-soft mb-3">
               Ramai creator &amp; marketer guna AFFILIX MEDIA untuk jimatkan masa setup akaun dan langganan digital.
+              Fokus pada content &amp; sales, bukan setting akaun.
             </p>
             <div class="d-flex flex-wrap gap-2">
               <span class="badge-soft-alt">Creator TikTok &amp; Reels</span>
@@ -617,10 +850,10 @@
           </div>
 
           <div class="col-md-7 animate-on-scroll delay-1">
-            <div id="testimonialCard" class="surface-soft bg-grid p-4">
+            <div id="testimonialCard" class="surface-soft testimonial-card p-4">
               <div class="testimonial-quote mb-3">
-                <p id="testimonialText" class="mb-2 text-muted-soft">
-                  “Servis laju dan senang. Lepas bayar, terus dapat akses ChatGPT Plus. Memang jimat masa dan kos.”
+                <p id="testimonialText" class="mb-2">
+                  Servis laju dan senang. Lepas bayar, terus dapat akses ChatGPT Plus. Memang jimat masa dan kos.
                 </p>
               </div>
               <div class="d-flex align-items-center justify-content-between">
@@ -630,8 +863,9 @@
                     Content Creator TikTok
                   </p>
                 </div>
-                <div class="text-warning small d-flex align-items-center gap-1">
-                  <span>★★★★★</span>
+                <div class="small d-flex align-items-center gap-2">
+                  <span class="text-warning">★★★★★</span>
+                  <span class="badge-soft-alt">Verified</span>
                 </div>
               </div>
             </div>
@@ -640,18 +874,18 @@
       </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- FAQ SECTION -->
     <section id="faq" class="section">
       <div class="container">
-        <div class="mb-3 animate-on-scroll" style="max-width: 620px;">
-          <p class="section-header-eyebrow mb-1">Soalan Lazim</p>
-          <h2 class="section-header-title mb-2">FAQ AFFILIX MEDIA</h2>
+        <div class="mb-3 animate-on-scroll" style="max-width: 640px;">
+          <p class="section-eyebrow mb-1">Soalan Lazim</p>
+          <h2 class="section-title mb-2">FAQ AFFILIX MEDIA</h2>
           <p class="text-muted-soft mb-0">
-            Beberapa soalan yang biasa ditanya sebelum pelanggan buat order.
+            Beberapa soalan yang biasa ditanya sebelum pelanggan buat order. Kalau ada soalan lain, terus WhatsApp kami.
           </p>
         </div>
 
-        <div class="animate-on-scroll delay-1" style="max-width: 620px;">
+        <div class="animate-on-scroll delay-1" style="max-width: 640px;">
           <div class="accordion" id="faqAccordion">
             <div class="accordion-item mb-2">
               <h2 class="accordion-header" id="heading0">
@@ -671,7 +905,7 @@
                 class="accordion-collapse collapse"
                 data-bs-parent="#faqAccordion"
               >
-                <div class="accordion-body text-muted-soft" style="font-size: 0.85rem;">
+                <div class="accordion-body">
                   Anda pilih produk &amp; tambah ke cart, tekan "Checkout via WhatsApp" dan hantarkan mesej.
                   Admin akan respon dengan langkah pembayaran &amp; aktifkan akaun / hantar akses anda.
                 </div>
@@ -696,8 +930,9 @@
                 class="accordion-collapse collapse"
                 data-bs-parent="#faqAccordion"
               >
-                <div class="accordion-body text-muted-soft" style="font-size: 0.85rem;">
-                  Kebiasaannya dalam 1–10 minit waktu bekerja. Waktu peak mungkin sedikit lambat, tapi kami akan cuba uruskan secepat boleh.
+                <div class="accordion-body">
+                  Kebiasaannya dalam 1–10 minit waktu bekerja. Waktu peak mungkin sedikit lambat, tapi kami akan
+                  cuba uruskan secepat boleh.
                 </div>
               </div>
             </div>
@@ -720,12 +955,13 @@
                 class="accordion-collapse collapse"
                 data-bs-parent="#faqAccordion"
               >
-                <div class="accordion-body text-muted-soft" style="font-size: 0.85rem;">
+                <div class="accordion-body">
                   Ya, untuk produk seperti ChatGPT Plus &amp; beberapa tools lain, anda akan gunakan email sendiri
                   (ikut info pada kad produk semasa order).
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -733,7 +969,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="border-top border-secondary py-3">
+  <footer class="py-3">
     <div class="container d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2 small text-muted">
       <div class="d-flex align-items-center gap-2">
         <div class="navbar-brand-mark" style="width: 26px; height: 26px;">
@@ -768,10 +1004,11 @@
           <span id="cartTotal" class="fw-semibold text-info">RM0</span>
         </div>
         <button
-          class="btn btn-main w-100 btn-sm fw-semibold mb-2 justify-content-center"
+          class="checkout-btn w-100 mb-2"
           onclick="checkoutWhatsApp()"
         >
-          Checkout via WhatsApp
+          <span>💬</span>
+          <span>Checkout via WhatsApp</span>
         </button>
         <p class="text-muted" style="font-size: 0.7rem;">
           Nota: Tiada bayaran dibuat di website ini. Semua transaksi akan disahkan secara terus melalui WhatsApp.
@@ -794,7 +1031,7 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- APP SCRIPT -->
+  <!-- APP SCRIPT (LOGIC SAMA, UI BARU) -->
   <script>
     const WHATSAPP_LINK = "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0";
     const STORAGE_KEY = "affilix_products_v1";
@@ -838,8 +1075,8 @@
         btn.textContent = cat === "All" ? "Semua" : cat;
         btn.type = "button";
         btn.className =
-          "btn btn-outline-chip btn-sm me-2 mb-2 " +
-          (filteredCategory === cat ? "btn-info text-dark" : "btn-outline-secondary text-light");
+          "filter-chip-btn " +
+          (filteredCategory === cat ? "active" : "");
         btn.onclick = () => {
           filteredCategory = cat;
           renderProducts();
@@ -872,7 +1109,7 @@
             <img src="${p.img}" alt="${p.name}" />
             ${
               p.badge
-                ? `<span class="badge position-absolute top-0 start-0 m-2 rounded-pill bg-primary small">${p.badge}</span>`
+                ? `<span class="badge position-absolute top-0 start-0 m-2 rounded-pill bg-warning text-dark small">${p.badge}</span>`
                 : ""
             }
             ${
@@ -888,14 +1125,14 @@
             </div>
             <p class="text-muted-soft mb-2" style="font-size: 0.8rem;">${p.desc}</p>
             <div class="mb-2 d-flex justify-content-between align-items-center">
-              <p class="mb-0 fw-semibold text-info">RM${p.price}</p>
+              <p class="mb-0 fw-semibold" style="color: #facc15;">RM${p.price}</p>
               <small class="text-muted">Stok: ${p.stock}</small>
             </div>
             <div class="mt-auto">
               <button
                 ${p.stock <= 0 ? "disabled" : ""}
-                class="btn btn-sm fw-semibold rounded-pill w-100 ${
-                  p.stock <= 0 ? "btn-outline-secondary" : "btn-outline-info text-info"
+                class="${
+                  p.stock <= 0 ? "btn-disabled-soft w-100" : "btn-outline-soft w-100"
                 }"
                 onclick="addToCart(${p.id})"
               >
@@ -911,7 +1148,7 @@
 
       if (list.length === 0) {
         const empty = document.createElement("p");
-        empty.className = "text-muted-soft";
+        empty.className = "text-muted-soft mt-2";
         empty.textContent = "Tiada produk ditemui. Cuba tukar carian atau kategori.";
         grid.appendChild(empty);
       }
