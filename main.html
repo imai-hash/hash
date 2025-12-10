@@ -375,6 +375,37 @@
       opacity: 0.6;
     }
 
+    /* Flying to cart animation clone */
+    .flying-image {
+      position: fixed;
+      z-index: 2000;
+      pointer-events: none;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.9);
+      transition:
+        transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1),
+        opacity 0.75s ease-out;
+      will-change: transform, opacity;
+    }
+
+    /* Cart bounce animation */
+    .cart-bounce {
+      animation: cart-bounce 0.4s ease;
+    }
+
+    @keyframes cart-bounce {
+      0% {
+        transform: translateY(0) scale(1);
+      }
+      35% {
+        transform: translateY(-3px) scale(1.12);
+      }
+      100% {
+        transform: translateY(0) scale(1);
+      }
+    }
+
     /* Responsive tweaks */
     @media (max-width: 575.98px) {
       .floating-wa {
@@ -477,7 +508,6 @@
                 <span>👥</span>
                 <div>
                   <div style="font-size: 0.78rem;">100+ pelanggan / bulan</div>
-                  <!-- text to white -->
                   <div class="text-light" style="font-size: 0.7rem;">Creator, agency, SME &amp; student</div>
                 </div>
               </div>
@@ -485,7 +515,6 @@
                 <span>✅</span>
                 <div>
                   <div style="font-size: 0.78rem;">Akses cepat &amp; support</div>
-                  <!-- text to white -->
                   <div class="text-light" style="font-size: 0.7rem;">Order dalam ~1–10 minit</div>
                 </div>
               </div>
@@ -494,14 +523,12 @@
             <!-- Countdown -->
             <div class="surface-soft bg-grid p-3 d-flex align-items-center gap-3" style="max-width: 420px;">
               <div>
-                <!-- text to white -->
                 <p class="text-uppercase text-light mb-1" style="letter-spacing: 0.18em; font-size: 0.65rem;">
                   Promo Tamat Dalam
                 </p>
                 <div id="countdown" class="d-flex gap-3 text-center small">
                   <div>
                     <div id="cdDays" class="h4 mb-0 text-info">00</div>
-                    <!-- label to white -->
                     <div class="text-light" style="font-size: 0.7rem;">Hari</div>
                   </div>
                   <div>
@@ -562,7 +589,7 @@
 
                 <button
                   class="btn btn-info w-100 btn-sm fw-semibold rounded-pill mb-2"
-                  onclick="addHighlightedProduct()"
+                  onclick="addHighlightedProduct(this)"
                 >
                   Tambah ke Cart
                 </button>
@@ -864,6 +891,54 @@
       });
     }
 
+    // Flying to cart animation
+    function animateAddToCart(sourceEl) {
+      if (!sourceEl) return;
+      const cartBtn = document.getElementById("cartButton");
+      if (!cartBtn) return;
+
+      const imgRect = sourceEl.getBoundingClientRect();
+      const cartRect = cartBtn.getBoundingClientRect();
+
+      const flying = sourceEl.cloneNode(true);
+      flying.classList.add("flying-image");
+      flying.style.top = imgRect.top + "px";
+      flying.style.left = imgRect.left + "px";
+      flying.style.width = imgRect.width + "px";
+      flying.style.height = imgRect.height + "px";
+      flying.style.transform = "translate3d(0,0,0) scale(1)";
+      flying.style.opacity = "1";
+
+      document.body.appendChild(flying);
+
+      const deltaX =
+        cartRect.left + cartRect.width / 2 - (imgRect.left + imgRect.width / 2);
+      const deltaY =
+        cartRect.top + cartRect.height / 2 - (imgRect.top + imgRect.height / 2);
+
+      // Trigger transition on next frame
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          flying.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(0.2)`;
+          flying.style.opacity = "0";
+        });
+      });
+
+      flying.addEventListener("transitionend", () => {
+        flying.remove();
+      });
+    }
+
+    // Cart bounce helper
+    function bounceCart() {
+      const cartBtn = document.getElementById("cartButton");
+      if (!cartBtn) return;
+      cartBtn.classList.remove("cart-bounce");
+      // Force reflow so animation can replay
+      void cartBtn.offsetWidth;
+      cartBtn.classList.add("cart-bounce");
+    }
+
     // Products
     function renderProducts() {
       const grid = document.getElementById("productGrid");
@@ -883,44 +958,42 @@
         card.className = "product-card h-100";
 
         card.innerHTML = `
-  <div class="product-card-img">
-    <img src="${p.img}" alt="${p.name}" />
-    ${
-      p.badge
-        ? `<span class="badge position-absolute top-0 start-0 m-2 rounded-pill bg-primary small">${p.badge}</span>`
-        : ""
-    }
-    ${
-      p.stock <= 0
-        ? `<span class="badge position-absolute top-0 end-0 m-2 rounded-pill bg-danger small">Sold Out</span>`
-        : ""
-    }
-  </div>
-  <div class="p-3 d-flex flex-column h-100">
-    <div class="d-flex justify-content-between align-items-start mb-2">
-      <h3 class="h6 mb-0">${p.name}</h3>
-      <span class="product-chip">${p.category}</span>
-    </div>
-    <p class="text-muted-soft mb-2" style="font-size: 0.8rem;">${p.desc}</p>
+          <div class="product-card-img">
+            <img src="${p.img}" alt="${p.name}" />
+            ${
+              p.badge
+                ? `<span class="badge position-absolute top-0 start-0 m-2 rounded-pill bg-primary small">${p.badge}</span>`
+                : ""
+            }
+            ${
+              p.stock <= 0
+                ? `<span class="badge position-absolute top-0 end-0 m-2 rounded-pill bg-danger small">Sold Out</span>`
+                : ""
+            }
+          </div>
+          <div class="p-3 d-flex flex-column h-100">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 class="h6 mb-0">${p.name}</h3>
+              <span class="product-chip">${p.category}</span>
+            </div>
+            <p class="text-muted-soft mb-2" style="font-size: 0.8rem;">${p.desc}</p>
 
-    <!-- Price + Stok -->
-    <div class="mb-2">
-      <p class="mb-0 fw-semibold text-info">RM${p.price}</p>
-      <small class="text-light d-block">Stok: ${p.stock}</small>
-    </div>
+            <div class="mb-2">
+              <p class="mb-0 fw-semibold text-info">RM${p.price}</p>
+              <small class="text-light d-block">Stok: ${p.stock}</small>
+            </div>
 
-    <!-- Add to Cart button DIRECTLY under Stok -->
-    <button
-      ${p.stock <= 0 ? "disabled" : ""}
-      class="btn btn-sm fw-semibold rounded-pill w-100 ${
-        p.stock <= 0 ? "btn-outline-secondary" : "btn-info text-dark"
-      }"
-      onclick="addToCart(${p.id})"
-    >
-      ${p.stock <= 0 ? "Stok Habis" : "Add to Cart"}
-    </button>
-  </div>
-`;
+            <button
+              ${p.stock <= 0 ? "disabled" : ""}
+              class="btn btn-sm fw-semibold rounded-pill w-100 ${
+                p.stock <= 0 ? "btn-outline-secondary" : "btn-info text-dark"
+              }"
+              onclick="addToCart(${p.id}, this)"
+            >
+              ${p.stock <= 0 ? "Stok Habis" : "Add to Cart"}
+            </button>
+          </div>
+        `;
 
         col.appendChild(card);
         grid.appendChild(col);
@@ -934,7 +1007,7 @@
       }
     }
 
-    function addToCart(id) {
+    function addToCart(id, btnEl) {
       const product = products.find(p => p.id === id);
       if (!product || product.stock <= 0) return;
 
@@ -945,10 +1018,24 @@
         cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
       }
       updateCartUI();
+
+      // Animate from product image if available
+      if (btnEl) {
+        const card = btnEl.closest(".product-card");
+        const imgEl = card ? card.querySelector(".product-card-img img") : null;
+        if (imgEl) {
+          animateAddToCart(imgEl);
+        } else {
+          // Fallback: still bounce cart
+          bounceCart();
+        }
+      }
     }
 
-    function addHighlightedProduct() {
-      addToCart(1); // id 1 = ChatGPT Plus
+    function addHighlightedProduct(btnEl) {
+      // Add highlighted product (id 1) and animate cart bounce
+      addToCart(1, null);
+      bounceCart();
       openCart();
     }
 
@@ -999,6 +1086,9 @@
 
       countEl.textContent = String(totalItems);
       totalEl.textContent = "RM" + totalPrice.toFixed(2);
+
+      // Bounce cart whenever UI updates (i.e. item added/changed)
+      bounceCart();
     }
 
     function openCart() {
