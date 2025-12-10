@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="ms">
 <head>
@@ -371,6 +369,12 @@
     .animate-on-scroll.delay-2 { transition-delay: 0.2s; }
     .animate-on-scroll.delay-3 { transition-delay: 0.3s; }
 
+    /* Search input placeholder in white */
+    .search-input::placeholder {
+      color: #ffffff;
+      opacity: 0.6;
+    }
+
     /* Responsive tweaks */
     @media (max-width: 575.98px) {
       .floating-wa {
@@ -473,14 +477,16 @@
                 <span>👥</span>
                 <div>
                   <div style="font-size: 0.78rem;">100+ pelanggan / bulan</div>
-                  <div class="text-muted" style="font-size: 0.7rem;">Creator, agency, SME &amp; student</div>
+                  <!-- text to white -->
+                  <div class="text-light" style="font-size: 0.7rem;">Creator, agency, SME &amp; student</div>
                 </div>
               </div>
               <div class="hero-metric d-flex align-items-center gap-2" style="border-color: rgba(56,189,248,0.45);">
                 <span>✅</span>
                 <div>
                   <div style="font-size: 0.78rem;">Akses cepat &amp; support</div>
-                  <div class="text-muted" style="font-size: 0.7rem;">Order dalam ~1–10 minit</div>
+                  <!-- text to white -->
+                  <div class="text-light" style="font-size: 0.7rem;">Order dalam ~1–10 minit</div>
                 </div>
               </div>
             </div>
@@ -488,25 +494,27 @@
             <!-- Countdown -->
             <div class="surface-soft bg-grid p-3 d-flex align-items-center gap-3" style="max-width: 420px;">
               <div>
-                <p class="text-uppercase text-muted mb-1" style="letter-spacing: 0.18em; font-size: 0.65rem;">
+                <!-- text to white -->
+                <p class="text-uppercase text-light mb-1" style="letter-spacing: 0.18em; font-size: 0.65rem;">
                   Promo Tamat Dalam
                 </p>
                 <div id="countdown" class="d-flex gap-3 text-center small">
                   <div>
                     <div id="cdDays" class="h4 mb-0 text-info">00</div>
-                    <div class="text-muted" style="font-size: 0.7rem;">Hari</div>
+                    <!-- label to white -->
+                    <div class="text-light" style="font-size: 0.7rem;">Hari</div>
                   </div>
                   <div>
                     <div id="cdHours" class="h4 mb-0 text-info">00</div>
-                    <div class="text-muted" style="font-size: 0.7rem;">Jam</div>
+                    <div class="text-light" style="font-size: 0.7rem;">Jam</div>
                   </div>
                   <div>
                     <div id="cdMinutes" class="h4 mb-0 text-info">00</div>
-                    <div class="text-muted" style="font-size: 0.7rem;">Minit</div>
+                    <div class="text-light" style="font-size: 0.7rem;">Minit</div>
                   </div>
                   <div>
                     <div id="cdSeconds" class="h4 mb-0 text-info">00</div>
-                    <div class="text-muted" style="font-size: 0.7rem;">Saat</div>
+                    <div class="text-light" style="font-size: 0.7rem;">Saat</div>
                   </div>
                 </div>
               </div>
@@ -582,14 +590,19 @@
               Pilih beberapa produk, tambah ke cart dan sekali checkout di WhatsApp.
             </p>
           </div>
+          <!-- SEARCH INPUT WITH ICON -->
           <div class="d-flex align-items-center gap-2">
-            <input
-              id="searchInput"
-              type="text"
-              class="form-control form-control-sm bg-dark text-light border-secondary"
-              placeholder="Cari produk (contoh: ChatGPT, Canva)..."
-              style="width: min(280px, 75vw);"
-            />
+            <div class="input-group input-group-sm" style="width: min(280px, 75vw);">
+              <span class="input-group-text bg-dark border-secondary text-white">
+                🔍
+              </span>
+              <input
+                id="searchInput"
+                type="text"
+                class="form-control bg-dark text-light border-secondary search-input"
+                placeholder="Cari produk... (contoh: ChatGPT, Canva)"
+              />
+            </div>
           </div>
         </div>
 
@@ -891,17 +904,18 @@
             <p class="text-muted-soft mb-2" style="font-size: 0.8rem;">${p.desc}</p>
             <div class="mb-2 d-flex justify-content-between align-items-center">
               <p class="mb-0 fw-semibold text-info">RM${p.price}</p>
-              <small class="text-muted">Stok: ${p.stock}</small>
+              <!-- Stok text color to white -->
+              <small class="text-light">Stok: ${p.stock}</small>
             </div>
             <div class="mt-auto">
               <button
                 ${p.stock <= 0 ? "disabled" : ""}
                 class="btn btn-sm fw-semibold rounded-pill w-100 ${
-                  p.stock <= 0 ? "btn-outline-secondary" : "btn-outline-info text-info"
+                  p.stock <= 0 ? "btn-outline-secondary" : "btn-info text-dark"
                 }"
                 onclick="addToCart(${p.id})"
               >
-                ${p.stock <= 0 ? "Stok Habis" : "Tambah ke Cart"}
+                ${p.stock <= 0 ? "Stok Habis" : "Add to Cart"}
               </button>
             </div>
           </div>
