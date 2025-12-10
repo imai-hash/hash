@@ -1,417 +1,1825 @@
-<!DOCTYPE html><html lang="ms"> <head> <meta charset="UTF-8" /> <title>AFFILIX MEDIA – Kedai Produk Digital</title> <meta name="viewport" content="width=device-width, initial-scale=1" /> <script src="https://cdn.tailwindcss.com"></script> <style> .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(148, 163, 184, 0.2); } .neon-border { box-shadow: 0 0 18px rgba(56, 189, 248, 0.7), 0 0 32px rgba(147, 51, 234, 0.7); } .bg-grid { background-image: radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.18) 1px, transparent 0); background-size: 40px 40px; } .fade-enter { opacity: 0; transform: translateY(10px); } .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease, transform 0.4s ease; } </style> </head> <body class="bg-black text-slate-100 min-h-screen flex flex-col"> <!-- Floating background gradient --> <div class="pointer-events-none fixed inset-0 opacity-60"> <div class="absolute -top-32 -left-32 w-72 h-72 rounded-full bg-cyan-500 blur-3xl"></div> <div class="absolute -bottom-40 -right-10 w-80 h-80 rounded-full bg-purple-700 blur-3xl"></div> </div> <!-- NAVBAR --> <header class="sticky top-0 z-40 bg-black/80 backdrop-blur border-b border-slate-800"> <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3"> <div class="flex items-center gap-3"> <img src="affilixmedia-logo.png" alt="AFFILIX MEDIA" class="w-9 h-9 object-contain" /> <div class="leading-tight"> <p class="font-semibold tracking-[0.18em] text-xs text-cyan-300">AFFILIX</p> <p class="font-semibold tracking-[0.14em] text-xs text-slate-200">MEDIA</p> </div> </div> <nav class="hidden md:flex gap-6 text-sm text-slate-300"> <a href="#home" class="hover:text-cyan-300">Home</a> <a href="#produk" class="hover:text-cyan-300">Produk</a> <a href="#testimoni" class="hover:text-cyan-300">Testimoni</a> <a href="#faq" class="hover:text-cyan-300">FAQ</a> </nav> <button id="cartButton" class="relative glass px-3 py-1.5 rounded-full text-xs flex items-center gap-2 hover:border-cyan-400 border border-slate-700" onclick="openCart()"> <span class="text-lg">🛒</span> <span>Cart</span> <span id="cartCount" class="text-[10px] bg-cyan-500 text-black rounded-full px-2 py-0.5">0</span> </button> </div> </header> <!-- MAIN --> <main class="flex-1"> <!-- HERO --> <section id="home" class="max-w-6xl mx-auto px-4 pt-10 pb-12 lg:flex lg:items-center lg:gap-10"> <div class="relative z-10 lg:w-1/2"> <p class="text-xs uppercase tracking-[0.28em] text-cyan-300 mb-3">AFFILIX MEDIA</p> <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4"> Kedai <span class="text-cyan-400">Produk Digital</span><br /> Untuk <span class="text-purple-400">Creator & Marketer</span> </h1> <p class="text-sm sm:text-base text-slate-300 mb-5"> Topup ChatGPT Plus, Canva Pro, CapCut Pro & banyak lagi tools digital – semua dalam satu landing page. Klik, pilih produk, dan checkout terus ke WhatsApp business AFFILIX MEDIA. </p> <div class="flex flex-wrap items-center gap-3 mb-6"> <button onclick="openWhatsAppDirect()" class="neon-border bg-gradient-to-r from-cyan-500 to-purple-600 text-black font-semibold text-sm px-5 py-2.5 rounded-full hover:scale-105 active:scale-95 transition"> Beli Sekarang di WhatsApp </button> <span class="text-[11px] px-3 py-1 rounded-full border border-slate-700 glass"> ⚡ Promo terhad – stok digital terhad setiap hari </span> </div>
-    <!-- Countdown -->
-    <div class="glass rounded-2xl p-4 inline-flex items-center gap-4">
-      <div>
-        <p class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Promo Tamat Dalam</p>
-        <div id="countdown" class="flex gap-4 mt-1 text-center text-xs">
-          <div>
-            <p id="cdDays" class="text-xl font-bold text-cyan-300">00</p>
-            <p class="text-[10px] text-slate-400">Hari</p>
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <title>AFFILIX MEDIA – Kedai Produk Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617ee;
+      --card: rgba(15, 23, 42, 0.9);
+      --border-subtle: rgba(148, 163, 184, 0.25);
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent-cyan: #22d3ee;
+      --accent-cyan-soft: #0f172acc;
+      --accent-purple: #a855f7;
+      --accent-emerald: #22c55e;
+      --danger: #ef4444;
+      --radius-xl: 1.5rem;
+      --radius-full: 999px;
+      --shadow-soft: 0 18px 60px rgba(15, 23, 42, 0.95);
+      --transition-fast: 0.18s ease-out;
+      --transition-normal: 0.25s ease;
+    }
+
+    /* Global reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #0f172a, #020617 55%, #000);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    /* Nice scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 999px;
+    }
+
+    /* Utility */
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-inline: 1rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .glass {
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .neon-border {
+      box-shadow:
+        0 0 24px rgba(56, 189, 248, 0.7),
+        0 0 40px rgba(147, 51, 234, 0.7);
+    }
+
+    .bg-grid {
+      background-image: radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.18) 1px, transparent 0);
+      background-size: 40px 40px;
+    }
+
+    .pill {
+      border-radius: var(--radius-full);
+      padding: 0.3rem 0.8rem;
+      font-size: 0.7rem;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+
+    .text-xs {
+      font-size: 0.75rem;
+    }
+    .text-sm {
+      font-size: 0.9rem;
+    }
+
+    /* Floating background blobs */
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    .page-bg::before,
+    .page-bg::after {
+      content: "";
+      position: absolute;
+      filter: blur(80px);
+      border-radius: 999px;
+      opacity: 0.9;
+      animation: float 12s ease-in-out infinite alternate;
+    }
+
+    .page-bg::before {
+      width: 270px;
+      height: 270px;
+      top: -80px;
+      left: -80px;
+      background: radial-gradient(circle, #22d3ee, transparent);
+    }
+
+    .page-bg::after {
+      width: 320px;
+      height: 320px;
+      bottom: -110px;
+      right: -40px;
+      background: radial-gradient(circle, #a855f7, transparent);
+      animation-delay: -4s;
+    }
+
+    @keyframes float {
+      from {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      to {
+        transform: translate3d(20px, -20px, 0) scale(1.08);
+      }
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(2, 6, 23, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      padding-block: 0.7rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: 0.6rem;
+    }
+
+    .brand-text {
+      line-height: 1.1;
+    }
+
+    .brand-line {
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+    }
+
+    .brand-line:last-child {
+      letter-spacing: 0.14em;
+      color: #e5e7eb;
+    }
+
+    .main-nav {
+      display: none;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .main-nav a {
+      position: relative;
+      padding-bottom: 0.1rem;
+      transition: color var(--transition-normal);
+    }
+
+    .main-nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.2rem;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      transition: width var(--transition-normal);
+    }
+
+    .main-nav a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .main-nav a:hover::after {
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .main-nav {
+        display: flex;
+      }
+    }
+
+    #cartButton {
+      position: relative;
+      border-radius: var(--radius-full);
+      padding: 0.45rem 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      color: var(--text-main);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #1e293b;
+      transition:
+        border-color var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast);
+      box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+    }
+
+    #cartButton span:first-child {
+      font-size: 1.1rem;
+    }
+
+    #cartButton:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.5);
+      background: radial-gradient(circle at top left, rgba(34, 211, 238, 0.18), rgba(15, 23, 42, 0.9));
+    }
+
+    #cartButton:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    #cartCount {
+      font-size: 0.6rem;
+      background: var(--accent-cyan);
+      color: #020617;
+      border-radius: var(--radius-full);
+      padding: 0.15rem 0.4rem;
+      font-weight: 600;
+    }
+
+    /* HERO */
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .hero {
+      padding: 2.5rem 1rem 3rem;
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    @media (min-width: 992px) {
+      .hero-inner {
+        flex-direction: row;
+        align-items: center;
+        gap: 3rem;
+      }
+    }
+
+    .hero-left {
+      flex: 1;
+      animation: fade-up 0.7s ease-out both;
+    }
+
+    .hero-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 0.7rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw + 1rem, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(120deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-title span.alt {
+      background: linear-gradient(120deg, #f97316, var(--accent-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 34rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-primary {
+      border-radius: var(--radius-full);
+      padding: 0.7rem 1.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #020617;
+      border: none;
+      box-shadow: 0 18px 40px rgba(34, 211, 238, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        filter var(--transition-fast);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 22px 50px rgba(147, 51, 234, 0.6);
+      filter: brightness(1.03);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.9);
+    }
+
+    .hero-pill {
+      border-radius: var(--radius-full);
+      border: 1px dashed var(--border-subtle);
+      padding: 0.35rem 0.9rem;
+      font-size: 0.7rem;
+      background: rgba(15, 23, 42, 0.85);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+    }
+
+    .hero-pill::before {
+      content: "⚡";
+    }
+
+    /* Countdown card */
+    .countdown-card {
+      margin-top: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.1rem;
+      border-radius: 1rem;
+      background: radial-gradient(circle at top left, rgba(34, 211, 238, 0.22), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      font-size: 0.7rem;
+    }
+
+    .countdown-label {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #94a3b8;
+      font-size: 0.68rem;
+    }
+
+    .countdown-grid {
+      display: flex;
+      gap: 0.9rem;
+      margin-top: 0.25rem;
+      text-align: center;
+    }
+
+    .countdown-number {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .countdown-caption {
+      font-size: 0.6rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .countdown-text {
+      max-width: 180px;
+      font-size: 0.7rem;
+      color: var(--text-main);
+    }
+
+    .hero-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      animation: fade-up 0.7s ease-out both 0.1s;
+    }
+
+    .hero-card {
+      width: 100%;
+      max-width: 370px;
+      border-radius: var(--radius-xl);
+      padding: 1.4rem 1.3rem;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      opacity: 0.15;
+      background: conic-gradient(from 120deg, var(--accent-cyan), var(--accent-purple), #f97316, var(--accent-cyan));
+      filter: blur(50px);
+      z-index: -1;
+      animation: rotate-sheen 22s linear infinite;
+    }
+
+    @keyframes rotate-sheen {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .hero-card-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--accent-cyan);
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .hero-card-pricing {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .hero-card-price-old {
+      font-size: 0.75rem;
+      color: #64748b;
+      text-decoration: line-through;
+    }
+
+    .hero-card-price {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .hero-card-meta {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      margin-top: 0.2rem;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      align-items: flex-end;
+      font-size: 0.68rem;
+    }
+
+    .badge-soft {
+      padding-inline: 0.6rem;
+      padding-block: 0.15rem;
+      border-radius: 999px;
+      border: 1px solid;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .badge-soft.success {
+      border-color: rgba(34, 197, 94, 0.5);
+      background: rgba(34, 197, 94, 0.16);
+      color: #bbf7d0;
+    }
+
+    .badge-soft.warn {
+      border-color: rgba(249, 115, 22, 0.5);
+      background: rgba(249, 115, 22, 0.16);
+      color: #fed7aa;
+    }
+
+    .hero-card .btn-main {
+      width: 100%;
+      border-radius: var(--radius-full);
+      padding: 0.7rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      background: var(--accent-cyan);
+      color: #020617;
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: 0 18px 40px rgba(34, 211, 238, 0.35);
+    }
+
+    .hero-card .btn-main:hover {
+      background: #22d3ee;
+      transform: translateY(-1px);
+      box-shadow: 0 22px 50px rgba(34, 211, 238, 0.6);
+    }
+
+    .hero-card .btn-main:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.9);
+    }
+
+    .hero-card .btn-ghost {
+      width: 100%;
+      font-size: 0.72rem;
+      text-align: center;
+      color: var(--accent-cyan);
+      text-decoration: underline;
+      padding-top: 0.15rem;
+      opacity: 0.9;
+      transition: opacity var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .hero-card .btn-ghost:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    /* Sections shared */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--accent-cyan);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .section-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* PRODUCTS */
+    #produk {
+      padding: 0 1rem 3.4rem;
+    }
+
+    @media (min-width: 768px) {
+      #produk {
+        padding-bottom: 3.8rem;
+      }
+    }
+
+    .produk-top {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin-bottom: 1.4rem;
+    }
+
+    @media (min-width: 640px) {
+      .produk-top {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+
+    .produk-left {
+      max-width: 32rem;
+    }
+
+    .produk-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .search-input {
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(30, 64, 175, 0.6);
+      background: rgba(15, 23, 42, 0.92);
+      padding: 0.45rem 0.85rem;
+      font-size: 0.75rem;
+      color: var(--text-main);
+      min-width: min(16rem, 60vw);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    .search-input::placeholder {
+      color: #64748b;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.4);
+      background: #020617;
+    }
+
+    #categoryButtons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.75rem;
+    }
+
+    #categoryButtons button {
+      border-radius: var(--radius-full);
+      padding: 0.35rem 0.9rem;
+      border: 1px solid rgba(51, 65, 85, 0.85);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-muted);
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    #categoryButtons button:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      transform: translateY(-1px);
+    }
+
+    #categoryButtons button.is-active {
+      background: rgba(34, 211, 238, 0.16);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    #productGrid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      #productGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      #productGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .product-card {
+      border-radius: var(--radius-xl);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(30, 64, 175, 0.6);
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.9);
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal), background var(--transition-normal);
+    }
+
+    .product-card::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      opacity: 0;
+      background: conic-gradient(from 130deg, rgba(34, 211, 238, 0.5), rgba(168, 85, 247, 0.5), rgba(249, 115, 22, 0.5), rgba(34, 211, 238, 0.5));
+      filter: blur(60px);
+      transition: opacity 0.6s ease;
+      z-index: -1;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.8);
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.98);
+      background: radial-gradient(circle at top left, rgba(15, 118, 110, 0.2), rgba(15, 23, 42, 0.98));
+    }
+
+    .product-card:hover::after {
+      opacity: 0.9;
+    }
+
+    .product-thumb {
+      position: relative;
+      margin-bottom: 0.7rem;
+    }
+
+    .product-thumb img {
+      border-radius: 1.2rem;
+      height: 170px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.6rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      background: rgba(168, 85, 247, 0.85);
+      color: #fff;
+    }
+
+    .product-badge.badge-soldout {
+      right: 0.6rem;
+      left: auto;
+      background: rgba(239, 68, 68, 0.95);
+    }
+
+    .product-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .product-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .product-price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 0.25rem;
+    }
+
+    .product-meta {
+      font-size: 0.7rem;
+      color: #94a3b8;
+    }
+
+    .product-action {
+      margin-top: 0.7rem;
+    }
+
+    .btn-outline {
+      width: 100%;
+      border-radius: var(--radius-full);
+      padding-block: 0.55rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(34, 211, 238, 0.7);
+      color: var(--accent-cyan);
+      background: rgba(2, 6, 23, 0.9);
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .btn-outline:hover {
+      background: var(--accent-cyan);
+      color: #020617;
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(34, 211, 238, 0.5);
+    }
+
+    .btn-outline:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
+    }
+
+    .btn-outline[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .empty-state {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      padding-block: 1rem;
+    }
+
+    /* TESTIMONIALS */
+    #testimoni {
+      padding: 0 1rem 3.4rem;
+    }
+
+    .testimoni-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    @media (min-width: 768px) {
+      .testimoni-inner {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+    }
+
+    .testimoni-left {
+      flex: 1;
+      max-width: 280px;
+    }
+
+    .testimoni-right {
+      flex: 2;
+    }
+
+    .testimonial-card {
+      border-radius: 1.5rem;
+      padding: 1.4rem 1.3rem;
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.98);
+      min-height: 170px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(from 90deg, rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.3), rgba(251, 191, 36, 0.3), rgba(34, 211, 238, 0.3));
+      filter: blur(60px);
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    #testimonialText {
+      font-size: 0.9rem;
+      margin-bottom: 1.1rem;
+      color: #e5e7eb;
+    }
+
+    .testimonial-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    #testimonialName {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    #testimonialRole {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      margin-top: 0.15rem;
+    }
+
+    .stars {
+      font-size: 0.75rem;
+      color: #fbbf24;
+      letter-spacing: 0.05em;
+    }
+
+    /* FAQ */
+    #faq {
+      padding: 0 1rem 3.5rem;
+    }
+
+    .faq-list {
+      max-width: 34rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .faq-item {
+      border-radius: 1rem;
+      overflow: hidden;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      background: rgba(15, 23, 42, 0.96);
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.96);
+    }
+
+    .faq-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
+      background: linear-gradient(90deg, rgba(15, 23, 42, 0.96), rgba(30, 64, 175, 0.4));
+      cursor: pointer;
+    }
+
+    .faq-header span:last-child {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-left: 0.8rem;
+    }
+
+    .faq-body {
+      padding: 0.3rem 1rem 0.9rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid #1f2937;
+      background: rgba(2, 6, 23, 0.96);
+    }
+
+    .footer-inner {
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      font-size: 0.72rem;
+      color: #9ca3af;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    @media (min-width: 640px) {
+      .footer-inner {
+        flex-direction: row;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .footer-brand img {
+      width: 26px;
+      height: 26px;
+      border-radius: 0.5rem;
+      object-fit: contain;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* CART DRAWER */
+    #cartDrawer {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+    }
+
+    .cart-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+    }
+
+    .cart-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      max-width: 360px;
+      background: rgba(2, 6, 23, 0.98);
+      border-left: 1px solid #1f2937;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -24px 0 80px rgba(0, 0, 0, 0.9);
+      animation: slide-in 0.25s ease-out;
+    }
+
+    @keyframes slide-in {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .cart-header {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .cart-header button {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    #cartItems {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      font-size: 0.8rem;
+      overflow-y: auto;
+    }
+
+    .cart-row {
+      padding-block: 0.45rem;
+      border-bottom: 1px solid #111827;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .cart-row p {
+      margin: 0;
+    }
+
+    .cart-row-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .cart-row-sub {
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    .cart-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+
+    .cart-btn {
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .cart-btn:hover {
+      border-color: var(--accent-cyan);
+    }
+
+    .cart-btn.danger {
+      border-color: rgba(239, 68, 68, 0.85);
+      color: #fecaca;
+    }
+
+    .cart-btn.danger:hover {
+      background: var(--danger);
+      color: #020617;
+    }
+
+    .cart-footer {
+      border-top: 1px solid #1f2937;
+      padding: 0.8rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      font-size: 0.8rem;
+    }
+
+    .cart-total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #cartTotal {
+      font-weight: 600;
+      color: var(--accent-cyan);
+      font-size: 0.9rem;
+    }
+
+    .btn-checkout {
+      border-radius: var(--radius-full);
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #020617;
+      border: none;
+      box-shadow: 0 18px 40px rgba(34, 211, 238, 0.5);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+      width: 100%;
+    }
+
+    .btn-checkout:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 52px rgba(147, 51, 234, 0.6);
+      filter: brightness(1.03);
+    }
+
+    .btn-checkout:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.9);
+    }
+
+    .cart-note {
+      font-size: 0.65rem;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+
+    /* Floating WhatsApp Button */
+    #floatingWA {
+      position: fixed;
+      bottom: 1.3rem;
+      right: 1rem;
+      z-index: 40;
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(52, 211, 153, 0.9);
+      background: radial-gradient(circle at top left, rgba(16, 185, 129, 0.2), rgba(15, 23, 42, 0.96));
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: #f9fafb;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    #floatingWA span:first-child {
+      font-size: 1rem;
+    }
+
+    #floatingWA:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: #22c55e;
+      box-shadow: 0 22px 50px rgba(22, 163, 74, 0.5);
+    }
+
+    #floatingWA:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.95);
+    }
+
+    @media (max-width: 480px) {
+      #floatingWA {
+        padding-inline: 0.8rem;
+      }
+    }
+
+    /* Simple fade-up animation */
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Floating background gradient blobs -->
+  <div class="page-bg"></div>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <div class="brand">
+        <img src="affilixmedia-logo.png" alt="AFFILIX MEDIA" class="brand-logo" />
+        <div class="brand-text">
+          <p class="brand-line">AFFILIX</p>
+          <p class="brand-line">MEDIA</p>
+        </div>
+      </div>
+
+      <nav class="main-nav">
+        <a href="#home">Home</a>
+        <a href="#produk">Produk</a>
+        <a href="#testimoni">Testimoni</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <button id="cartButton" onclick="openCart()">
+        <span>🛒</span>
+        <span>Cart</span>
+        <span id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="container hero-inner">
+        <!-- Left -->
+        <div class="hero-left">
+          <p class="hero-tag">AFFILIX MEDIA</p>
+          <h1 class="hero-title">
+            Kedai <span>Produk Digital</span><br />
+            Untuk <span class="alt">Creator &amp; Marketer</span>
+          </h1>
+          <p class="hero-sub">
+            Topup ChatGPT Plus, Canva Pro, CapCut Pro &amp; banyak lagi tools digital – semua dalam satu landing page.
+            Klik, pilih produk, dan checkout terus ke WhatsApp business AFFILIX MEDIA.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="openWhatsAppDirect()">
+              Beli Sekarang di WhatsApp
+            </button>
+            <div class="hero-pill">
+              Promo terhad – stok digital terhad setiap hari
+            </div>
           </div>
-          <div>
-            <p id="cdHours" class="text-xl font-bold text-cyan-300">00</p>
-            <p class="text-[10px] text-slate-400">Jam</p>
+
+          <!-- Countdown -->
+          <div class="countdown-card glass">
+            <div>
+              <p class="countdown-label">Promo Tamat Dalam</p>
+              <div id="countdown" class="countdown-grid">
+                <div>
+                  <p id="cdDays" class="countdown-number">00</p>
+                  <p class="countdown-caption">Hari</p>
+                </div>
+                <div>
+                  <p id="cdHours" class="countdown-number">00</p>
+                  <p class="countdown-caption">Jam</p>
+                </div>
+                <div>
+                  <p id="cdMinutes" class="countdown-number">00</p>
+                  <p class="countdown-caption">Minit</p>
+                </div>
+                <div>
+                  <p id="cdSeconds" class="countdown-number">00</p>
+                  <p class="countdown-caption">Saat</p>
+                </div>
+              </div>
+            </div>
+            <div class="countdown-text">
+              Harga promo khas untuk batch terhad. Lepas habis timer, harga mungkin naik.
+            </div>
           </div>
-          <div>
-            <p id="cdMinutes" class="text-xl font-bold text-cyan-300">00</p>
-            <p class="text-[10px] text-slate-400">Minit</p>
-          </div>
-          <div>
-            <p id="cdSeconds" class="text-xl font-bold text-cyan-300">00</p>
-            <p class="text-[10px] text-slate-400">Saat</p>
+        </div>
+
+        <!-- Right highlight product -->
+        <div class="hero-right">
+          <div class="hero-card glass bg-grid neon-border">
+            <p class="hero-card-label">Produk Highlight</p>
+            <h2 class="hero-card-title">ChatGPT Plus 1 Bulan</h2>
+            <p class="hero-card-desc">
+              Akses AI laju, stabil &amp; lebih pintar untuk kerja, bisnes dan belajar.
+            </p>
+
+            <div class="hero-card-pricing">
+              <div>
+                <p class="hero-card-price-old">RM83+</p>
+                <p class="hero-card-price">RM25</p>
+                <p class="hero-card-meta">Guna email sendiri · Fast delivery</p>
+              </div>
+              <div class="badge-row">
+                <span class="badge-soft success">✅ Trusted Seller</span>
+                <span class="badge-soft warn">⚠ Slot tak banyak</span>
+              </div>
+            </div>
+
+            <button class="btn-main" onclick="addHighlightedProduct()">
+              Tambah ke Cart
+            </button>
+            <button class="btn-ghost" onclick="openCart()">
+              Lihat Cart &amp; Checkout via WhatsApp
+            </button>
           </div>
         </div>
       </div>
-      <div class="text-[11px] text-slate-300 max-w-[180px]">
-        Harga promo khas untuk batch terhad. Lepas habis timer, harga mungkin naik.
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Hero product card -->
-  <div class="relative z-10 mt-10 lg:mt-0 lg:w-1/2 flex justify-center">
-    <div class="glass rounded-3xl p-6 w-full max-w-sm neon-border bg-grid">
-      <p class="text-[11px] uppercase tracking-[0.18em] text-cyan-300 mb-2">Produk Highlight</p>
-      <h2 class="text-xl font-semibold mb-1">ChatGPT Plus 1 Bulan</h2>
-      <p class="text-sm text-slate-300 mb-4">
-        Akses AI laju, stabil & lebih pintar untuk kerja, bisnes dan belajar.
-      </p>
-      <div class="flex items-end justify-between mb-5">
-        <div>
-          <p class="text-xs text-slate-400 line-through">RM83+</p>
-          <p class="text-3xl font-bold text-cyan-300">RM25</p>
-          <p class="text-[11px] text-slate-400 mt-1">Guna email sendiri · Fast delivery</p>
-        </div>
-        <div class="flex flex-col items-end gap-1">
-          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">✅ Trusted Seller</span>
-          <span class="text-[11px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40">⚠ Slot tak banyak</span>
-        </div>
-      </div>
-      <button onclick="addHighlightedProduct()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-sm py-2.5 rounded-full mb-2 transition">
-        Tambah ke Cart
-      </button>
-      <button onclick="openCart()" class="w-full text-xs text-cyan-300 underline">
-        Lihat Cart & Checkout via WhatsApp
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- PRODUK SECTION -->
-<section id="produk" class="max-w-6xl mx-auto px-4 pb-14">
-  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5">
-    <div>
-      <p class="text-xs uppercase tracking-[0.22em] text-cyan-300 mb-1">Produk</p>
-      <h2 class="text-2xl font-semibold">Senarai Produk Digital</h2>
-      <p class="text-sm text-slate-300">Pilih beberapa produk, tambah ke cart dan checkout sekali gus melalui WhatsApp.</p>
-    </div>
-    <!-- Search -->
-    <div class="flex items-center gap-2">
-      <input id="searchInput" type="text" placeholder="Cari produk..."
-             class="glass border border-slate-700 text-xs rounded-full px-3 py-2 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 w-48 sm:w-64" />
-    </div>
-  </div>
-
-  <!-- Category buttons -->
-  <div id="categoryButtons" class="flex flex-wrap gap-2 mb-6 text-xs"></div>
-  <div id="productGrid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
-</section>
-
-<!-- TESTIMONI -->
-<section id="testimoni" class="max-w-6xl mx-auto px-4 pb-14">
-  <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
-    <div class="md:w-1/3">
-      <p class="text-xs uppercase tracking-[0.22em] text-cyan-300 mb-1">Social Proof</p>
-      <h2 class="text-2xl font-semibold mb-2">Apa pelanggan cakap?</h2>
-      <p class="text-sm text-slate-300">
-        Pelanggan guna AFFILIX MEDIA untuk mudahkan kerja content, marketing dan editing mereka setiap hari.
-      </p>
-    </div>
-    <div class="md:w-2/3">
-      <div id="testimonialCard" class="glass rounded-3xl p-6 min-h-[160px] flex flex-col justify-between">
-        <p id="testimonialText" class="text-sm text-slate-100 mb-4"></p>
-        <div class="flex items-center justify-between">
-          <div>
-            <p id="testimonialName" class="text-sm font-semibold"></p>
-            <p id="testimonialRole" class="text-xs text-slate-400"></p>
+    <!-- PRODUK SECTION -->
+    <section id="produk">
+      <div class="container">
+        <div class="produk-top">
+          <div class="produk-left section-header">
+            <p class="section-tag">Produk</p>
+            <h2 class="section-title">Senarai Produk Digital</h2>
+            <p class="section-sub">
+              Pilih beberapa produk, tambah ke cart dan checkout sekali gus melalui WhatsApp.
+            </p>
           </div>
-          <div class="flex gap-1 text-amber-400 text-xs">★★★★★</div>
+          <div class="produk-right">
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Cari produk..."
+              class="search-input"
+            />
+          </div>
+        </div>
+
+        <!-- Category buttons -->
+        <div id="categoryButtons"></div>
+
+        <!-- Product grid -->
+        <div id="productGrid"></div>
+      </div>
+    </section>
+
+    <!-- TESTIMONI -->
+    <section id="testimoni">
+      <div class="container testimoni-inner">
+        <div class="testimoni-left section-header">
+          <p class="section-tag">Social Proof</p>
+          <h2 class="section-title">Apa pelanggan cakap?</h2>
+          <p class="section-sub">
+            Pelanggan guna AFFILIX MEDIA untuk mudahkan kerja content, marketing dan editing mereka setiap hari.
+          </p>
+        </div>
+        <div class="testimoni-right">
+          <div id="testimonialCard" class="testimonial-card glass">
+            <p id="testimonialText"></p>
+            <div class="testimonial-footer">
+              <div>
+                <p id="testimonialName"></p>
+                <p id="testimonialRole"></p>
+              </div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- FAQ -->
-<section id="faq" class="max-w-6xl mx-auto px-4 pb-16">
-  <div class="max-w-2xl mb-6">
-    <p class="text-xs uppercase tracking-[0.22em] text-cyan-300 mb-1">Soalan Lazim</p>
-    <h2 class="text-2xl font-semibold mb-2">FAQ AFFILIX MEDIA</h2>
-    <p class="text-sm text-slate-300">Beberapa soalan yang selalu ditanya sebelum order.</p>
-  </div>
-  <div class="space-y-3 max-w-2xl">
-    <div class="glass rounded-2xl">
-      <button class="w-full flex items-center justify-between px-4 py-3 text-left text-sm" onclick="toggleFaq(0)">
-        <span>Bagaimana proses order?</span>
-        <span class="text-xs text-slate-400" id="faqIcon0">+</span>
-      </button>
-      <div id="faqBody0" class="px-4 pb-3 text-xs text-slate-300 hidden">
-        Anda pilih produk & tambah ke cart, tekan "Checkout via WhatsApp" dan hantarkan mesej.
-        Admin akan respon dengan details pembayaran & aktifkan akaun / hantar akses anda.
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-tag">Soalan Lazim</p>
+          <h2 class="section-title">FAQ AFFILIX MEDIA</h2>
+          <p class="section-sub">Beberapa soalan yang selalu ditanya sebelum order.</p>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item glass">
+            <button class="faq-header" onclick="toggleFaq(0)">
+              <span>Bagaimana proses order?</span>
+              <span id="faqIcon0">+</span>
+            </button>
+            <div id="faqBody0" class="faq-body hidden">
+              Anda pilih produk &amp; tambah ke cart, tekan "Checkout via WhatsApp" dan hantarkan mesej.
+              Admin akan respon dengan details pembayaran &amp; aktifkan akaun / hantar akses anda.
+            </div>
+          </div>
+
+          <div class="faq-item glass">
+            <button class="faq-header" onclick="toggleFaq(1)">
+              <span>Berapa lama masa proses?</span>
+              <span id="faqIcon1">+</span>
+            </button>
+            <div id="faqBody1" class="faq-body hidden">
+              Kebiasaannya dalam 1–10 minit waktu bekerja. Waktu peak mungkin sedikit lambat, tapi kami akan cuba secepat
+              mungkin.
+            </div>
+          </div>
+
+          <div class="faq-item glass">
+            <button class="faq-header" onclick="toggleFaq(2)">
+              <span>Adakah saya guna email sendiri?</span>
+              <span id="faqIcon2">+</span>
+            </button>
+            <div id="faqBody2" class="faq-body hidden">
+              Ya, untuk produk seperti ChatGPT Plus &amp; beberapa tools lain, anda boleh gunakan email sendiri (ikut info
+              pada kad produk).
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="affilixmedia-logo.png" alt="AFFILIX MEDIA" />
+        <span>AFFILIX MEDIA · Kedai Produk Digital untuk Creator &amp; Marketer.</span>
+      </div>
+      <div class="footer-right">
+        <span>© <span id="year"></span> AFFILIX MEDIA</span>
+        <span>|</span>
+        <span>All digital orders via WhatsApp.</span>
       </div>
     </div>
-    <div class="glass rounded-2xl">
-      <button class="w-full flex items-center justify-between px-4 py-3 text-left text-sm" onclick="toggleFaq(1)">
-        <span>Berapa lama masa proses?</span>
-        <span class="text-xs text-slate-400" id="faqIcon1">+</span>
-      </button>
-      <div id="faqBody1" class="px-4 pb-3 text-xs text-slate-300 hidden">
-        Kebiasaannya dalam 1–10 minit waktu bekerja. Waktu peak mungkin sedikit lambat, tapi kami akan cuba secepat mungkin.
+  </footer>
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" class="hidden">
+    <div class="cart-backdrop" onclick="closeCart()"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <h3>Cart AFFILIX MEDIA</h3>
+        <button onclick="closeCart()">Tutup ✕</button>
       </div>
-    </div>
-    <div class="glass rounded-2xl">
-      <button class="w-full flex items-center justify-between px-4 py-3 text-left text-sm" onclick="toggleFaq(2)">
-        <span>Adakah saya guna email sendiri?</span>
-        <span class="text-xs text-slate-400" id="faqIcon2">+</span>
-      </button>
-      <div id="faqBody2" class="px-4 pb-3 text-xs text-slate-300 hidden">
-        Ya, untuk produk seperti ChatGPT Plus & beberapa tools lain, anda boleh gunakan email sendiri (ikut info pada kad produk).
+      <div id="cartItems"></div>
+      <div class="cart-footer">
+        <div class="cart-total-row">
+          <span>Total</span>
+          <span id="cartTotal">RM0</span>
+        </div>
+        <button class="btn-checkout" onclick="checkoutWhatsApp()">
+          Checkout via WhatsApp
+        </button>
+        <p class="cart-note">
+          Nota: Tiada bayaran dibuat di website ini. Semua transaksi akan disahkan secara terus melalui WhatsApp.
+        </p>
       </div>
     </div>
   </div>
-</section>
-</main> <!-- FOOTER --> <footer class="border-t border-slate-800 bg-black/80"> <div class="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-3 items-center justify-between text-xs text-slate-400"> <div class="flex items-center gap-2"> <img src="affilixmedia-logo.png" alt="AFFILIX MEDIA" class="w-6 h-6 object-contain" /> <span>AFFILIX MEDIA · Kedai Produk Digital untuk Creator & Marketer.</span> </div> <div class="flex gap-3"> <span>© <span id="year"></span> AFFILIX MEDIA</span> <span class="hidden sm:inline">|</span> <span>All digital orders via WhatsApp.</span> </div> </div> </footer> <!-- CART DRAWER --> <div id="cartDrawer" class="fixed inset-0 z-50 hidden"> <div class="absolute inset-0 bg-black/60" onclick="closeCart()"></div> <div class="absolute right-0 top-0 h-full w-full max-w-sm glass bg-black/95 border-l border-slate-800 flex flex-col"> <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800"> <h3 class="text-sm font-semibold">Cart AFFILIX MEDIA</h3> <button class="text-xs text-slate-400" onclick="closeCart()">Tutup ✕</button> </div> <div id="cartItems" class="flex-1 overflow-y-auto px-4 py-3 text-sm"></div> <div class="border-t border-slate-800 p-4 space-y-2"> <div class="flex items-center justify-between text-sm"> <span>Total</span> <span id="cartTotal" class="font-semibold text-cyan-300">RM0</span> </div> <button onclick="checkoutWhatsApp()" class="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-black text-sm font-semibold py-2.5 rounded-full hover:scale-[1.02] active:scale-95 transition"> Checkout via WhatsApp </button> <p class="text-[10px] text-slate-400"> Nota: Tiada bayaran dibuat di website ini. Semua transaksi akan disahkan secara terus melalui WhatsApp. </p> </div> </div> </div> <!-- FLOATING WHATSAPP BUTTON -->
-<a id="floatingWA" href="https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0" class="fixed bottom-5 right-4 z-40 rounded-full px-4 py-2 glass border border-emerald-400 shadow-lg flex items-center gap-2 text-xs hover:scale-105 transition"> <span>💬</span> <span>Chat WhatsApp</span> </a>
 
-<script>
-  const WHATSAPP_LINK = "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0";
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a id="floatingWA"
+     href="https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0"
+     target="_blank"
+  >
+    <span>💬</span>
+    <span>Chat WhatsApp</span>
+  </a>
 
-  const STORAGE_KEY = "affilix_products_v1";
+  <script>
+    const WHATSAPP_LINK = "https://api.whatsapp.com/message/XVOHA3665FOFN1?autoload=1&app_absent=0";
+    const STORAGE_KEY = "affilix_products_v1";
 
-  const defaultProducts = [
-    { id: 1, name: "ChatGPT Plus 1 Bulan", price: 25, category: "AI Tools", desc: "Fast delivery, guna email sendiri.", img: "https://via.placeholder.com/600x400?text=ChatGPT+Plus", badge: "Hot", stock: 10 },
-    { id: 2, name: "Canva Pro 1 Bulan", price: 12, category: "Design", desc: "Akses penuh premium untuk design marketing & social media.", img: "https://via.placeholder.com/600x400?text=Canva+Pro", badge: "Sale", stock: 8 },
-    { id: 3, name: "CapCut Pro", price: 10, category: "Editing", desc: "Unlock semua features untuk editing video TikTok & Reels.", img: "https://via.placeholder.com/600x400?text=CapCut+Pro", badge: "New", stock: 15 },
-    { id: 4, name: "Premiere Pro Preset Pack", price: 19, category: "Editing", desc: "Preset color grading & transition untuk editor video.", img: "https://via.placeholder.com/600x400?text=Preset+Pack", badge: "Hot", stock: 7 },
-    { id: 5, name: "Bundle Skrip Hook TikTok", price: 15, category: "Copywriting", desc: "100+ skrip hook untuk content short-form.", img: "https://via.placeholder.com/600x400?text=Skrip+Hook", badge: "Hot", stock: 20 }
-  ];
+    const defaultProducts = [
+      { id: 1, name: "ChatGPT Plus 1 Bulan", price: 25, category: "AI Tools", desc: "Fast delivery, guna email sendiri.", img: "https://via.placeholder.com/600x400?text=ChatGPT+Plus", badge: "Hot", stock: 10 },
+      { id: 2, name: "Canva Pro 1 Bulan", price: 12, category: "Design", desc: "Akses penuh premium untuk design marketing & social media.", img: "https://via.placeholder.com/600x400?text=Canva+Pro", badge: "Sale", stock: 8 },
+      { id: 3, name: "CapCut Pro", price: 10, category: "Editing", desc: "Unlock semua features untuk editing video TikTok & Reels.", img: "https://via.placeholder.com/600x400?text=CapCut+Pro", badge: "New", stock: 15 },
+      { id: 4, name: "Premiere Pro Preset Pack", price: 19, category: "Editing", desc: "Preset color grading & transition untuk editor video.", img: "https://via.placeholder.com/600x400?text=Preset+Pack", badge: "Hot", stock: 7 },
+      { id: 5, name: "Bundle Skrip Hook TikTok", price: 15, category: "Copywriting", desc: "100+ skrip hook untuk content short-form.", img: "https://via.placeholder.com/600x400?text=Skrip+Hook", badge: "Hot", stock: 20 }
+    ];
 
-  let products = [];
-  let filteredCategory = "All";
-  let searchQuery = "";
-  let cart = [];
+    let products = [];
+    let filteredCategory = "All";
+    let searchQuery = "";
+    let cart = [];
 
-  // Load products
-  function loadProductsFromStorage() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        products = JSON.parse(saved);
-      } catch {
+    function loadProductsFromStorage() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          products = JSON.parse(saved);
+        } catch {
+          products = defaultProducts.slice();
+        }
+      } else {
         products = defaultProducts.slice();
       }
-    } else {
-      products = defaultProducts.slice();
-    }
-  }
-
-  // Categories
-  function renderCategories() {
-    const container = document.getElementById("categoryButtons");
-    const categories = ["All", ...new Set(products.map(p => p.category))];
-    container.innerHTML = "";
-    categories.forEach(cat => {
-      const btn = document.createElement("button");
-      btn.textContent = cat;
-      btn.className =
-        "px-3 py-1 rounded-full text-xs border border-slate-700 glass hover:border-cyan-400 transition" +
-        (filteredCategory === cat ? " bg-cyan-500/20 text-cyan-300 border-cyan-500" : "");
-      btn.onclick = () => {
-        filteredCategory = cat;
-        renderProducts();
-        renderCategories();
-      };
-      container.appendChild(btn);
-    });
-  }
-
-  // Products
-  function renderProducts() {
-    const grid = document.getElementById("productGrid");
-    grid.innerHTML = "";
-
-    const list = products.filter(p => {
-      const byCategory = filteredCategory === "All" || p.category === filteredCategory;
-      const bySearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
-      return byCategory && bySearch;
-    });
-
-    list.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "glass rounded-3xl p-4 flex flex-col justify-between bg-grid hover:translate-y-1 hover:shadow-xl transition";
-      card.innerHTML = `
-        <div class="mb-3">
-          <div class="relative mb-3">
-            <img src="${p.img}" alt="${p.name}" class="w-full h-40 object-cover rounded-2xl" />
-            ${p.badge ? `<span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-purple-600/80 text-white">${p.badge}</span>` : ""}
-            ${p.stock <= 0 ? `<span class="absolute top-2 right-2 text-[10px] px-2 py-0.5 rounded-full bg-red-600/80 text-white">Sold Out</span>` : ""}
-          </div>
-          <h3 class="text-sm font-semibold mb-1">${p.name}</h3>
-          <p class="text-xs text-slate-300 mb-2">${p.desc}</p>
-          <p class="text-lg font-bold text-cyan-300 mb-1">RM${p.price}</p>
-          <p class="text-[11px] text-slate-400">Kategori: ${p.category} · Stok: ${p.stock}</p>
-        </div>
-        <button
-          ${p.stock <= 0 ? "disabled" : ""}
-          class="mt-3 text-xs font-semibold py-2 rounded-full border border-cyan-500 text-cyan-300 hover:bg-cyan-500 hover:text-black transition disabled:opacity-40 disabled:cursor-not-allowed"
-          onclick="addToCart(${p.id})"
-        >
-          ${p.stock <= 0 ? "Stok Habis" : "Tambah ke Cart"}
-        </button>
-      `;
-      grid.appendChild(card);
-    });
-
-    if (list.length === 0) {
-      const empty = document.createElement("p");
-      empty.className = "text-xs text-slate-400";
-      empty.textContent = "Tiada produk ditemui. Cuba tukar carian atau kategori.";
-      grid.appendChild(empty);
-    }
-  }
-
-  function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    if (!product || product.stock <= 0) return;
-
-    const existing = cart.find(item => item.id === id);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
-    }
-    updateCartUI();
-  }
-
-  function addHighlightedProduct() {
-    addToCart(1); // id 1 = ChatGPT Plus
-    openCart();
-  }
-
-  function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
-    updateCartUI();
-  }
-
-  function changeQty(id, delta) {
-    const item = cart.find(i => i.id === id);
-    if (!item) return;
-    item.qty += delta;
-    if (item.qty <= 0) {
-      removeFromCart(id);
-    } else {
-      updateCartUI();
-    }
-  }
-
-  function updateCartUI() {
-    const container = document.getElementById("cartItems");
-    const countEl = document.getElementById("cartCount");
-    const totalEl = document.getElementById("cartTotal");
-
-    let totalItems = 0;
-    let totalPrice = 0;
-    container.innerHTML = "";
-
-    cart.forEach(item => {
-      totalItems += item.qty;
-      totalPrice += item.price * item.qty;
-
-      const row = document.createElement("div");
-      row.className = "flex items-center justify-between py-2 border-b border-slate-800";
-      row.innerHTML = `
-        <div class="mr-2">
-          <p class="font-medium">${item.name}</p>
-          <p class="text-xs text-slate-400">RM${item.price} × ${item.qty}</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="px-2 py-1 text-xs rounded-full border border-slate-700 hover:border-cyan-400" onclick="changeQty(${item.id}, -1)">−</button>
-          <button class="px-2 py-1 text-xs rounded-full border border-slate-700 hover:border-cyan-400" onclick="changeQty(${item.id}, 1)">+</button>
-          <button class="px-2 py-1 text-xs rounded-full border border-red-500 text-red-300 hover:bg-red-500 hover:text-black" onclick="removeFromCart(${item.id})">Hapus</button>
-        </div>
-      `;
-      container.appendChild(row);
-    });
-
-    countEl.textContent = String(totalItems);
-    totalEl.textContent = "RM" + totalPrice.toFixed(2);
-  }
-
-  function openCart() {
-    document.getElementById("cartDrawer").classList.remove("hidden");
-  }
-
-  function closeCart() {
-    document.getElementById("cartDrawer").classList.add("hidden");
-  }
-
-  // WhatsApp
-  function openWhatsAppDirect() {
-    window.open(WHATSAPP_LINK, "_blank");
-  }
-
-  function checkoutWhatsApp() {
-    if (cart.length === 0) {
-      alert("Cart kosong. Sila tambah produk dahulu.");
-      return;
     }
 
-    const lines = cart.map(
-      i => `• ${i.name} x${i.qty} — RM${(i.price * i.qty).toFixed(2)}`
-    );
-    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-
-    const msg = `Hai AFFILIX MEDIA! Saya nak checkout produk:\n\n${lines.join(
-      "\n"
-    )}\n\nTotal: RM${total.toFixed(
-      2
-    )}\n\nSila berikan langkah pembayaran.`;
-
-    const url = WHATSAPP_LINK + "&text=" + encodeURIComponent(msg);
-    window.open(url, "_blank");
-  }
-
-  // FAQ
-  function toggleFaq(i) {
-    const body = document.getElementById("faqBody" + i);
-    const icon = document.getElementById("faqIcon" + i);
-    const isHidden = body.classList.contains("hidden");
-
-    document.querySelectorAll('[id^="faqBody"]').forEach(el =>
-      el.classList.add("hidden")
-    );
-    document.querySelectorAll('[id^="faqIcon"]').forEach(el => (el.textContent = "+"));
-
-    if (isHidden) {
-      body.classList.remove("hidden");
-      icon.textContent = "−";
-    }
-  }
-
-  // Countdown (24 hours from now)
-  function startCountdown(hours = 24) {
-    const end = Date.now() + hours * 60 * 60 * 1000;
-    const dEl = document.getElementById("cdDays");
-    const hEl = document.getElementById("cdHours");
-    const mEl = document.getElementById("cdMinutes");
-    const sEl = document.getElementById("cdSeconds");
-
-    function tick() {
-      const diff = Math.max(0, end - Date.now());
-      const s = Math.floor(diff / 1000);
-      const days = Math.floor(s / 86400);
-      const hours = Math.floor((s % 86400) / 3600);
-      const mins = Math.floor((s % 3600) / 60);
-      const secs = s % 60;
-
-      dEl.textContent = String(days).padStart(2, "0");
-      hEl.textContent = String(hours).padStart(2, "0");
-      mEl.textContent = String(mins).padStart(2, "0");
-      sEl.textContent = String(secs).padStart(2, "0");
-    }
-
-    tick();
-    setInterval(tick, 1000);
-  }
-
-  // Init
-  document.addEventListener("DOMContentLoaded", () => {
-    // year
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear().toString();
-
-    // data
-    loadProductsFromStorage();
-    renderCategories();
-    renderProducts();
-
-    // search
-    const searchInput = document.getElementById("searchInput");
-    if (searchInput) {
-      searchInput.addEventListener("input", e => {
-        searchQuery = e.target.value || "";
-        renderProducts();
+    function renderCategories() {
+      const container = document.getElementById("categoryButtons");
+      const categories = ["All", ...new Set(products.map(p => p.category))];
+      container.innerHTML = "";
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        if (filteredCategory === cat) btn.classList.add("is-active");
+        btn.onclick = () => {
+          filteredCategory = cat;
+          renderProducts();
+          renderCategories();
+        };
+        container.appendChild(btn);
       });
     }
 
-    // countdown
-    startCountdown(24);
+    function renderProducts() {
+      const grid = document.getElementById("productGrid");
+      grid.innerHTML = "";
 
-    // cart init
-    updateCartUI();
-  });
-</script>
+      const list = products.filter(p => {
+        const byCategory = filteredCategory === "All" || p.category === filteredCategory;
+        const bySearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return byCategory && bySearch;
+      });
 
+      list.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "product-card glass bg-grid";
+        card.innerHTML = `
+          <div class="product-main">
+            <div class="product-thumb">
+              <img src="${p.img}" alt="${p.name}" />
+              ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+              ${p.stock <= 0 ? `<span class="product-badge badge-soldout">Sold Out</span>` : ""}
+            </div>
+            <h3 class="product-title">${p.name}</h3>
+            <p class="product-desc">${p.desc}</p>
+            <p class="product-price">RM${p.price}</p>
+            <p class="product-meta">Kategori: ${p.category} · Stok: ${p.stock}</p>
+          </div>
+          <div class="product-action">
+            <button
+              ${p.stock <= 0 ? "disabled" : ""}
+              class="btn-outline"
+              onclick="addToCart(${p.id})"
+            >
+              ${p.stock <= 0 ? "Stok Habis" : "Tambah ke Cart"}
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
 
-</body> </html>
-  <div id="productGrid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></d
+      if (list.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "empty-state";
+        empty.textContent = "Tiada produk ditemui. Cuba tukar carian atau kategori.";
+        grid.appendChild(empty);
+      }
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      if (!product || product.stock <= 0) return;
+
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
+      }
+      updateCartUI();
+    }
+
+    function addHighlightedProduct() {
+      addToCart(1);
+      openCart();
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCartUI();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        removeFromCart(id);
+      } else {
+        updateCartUI();
+      }
+    }
+
+    function updateCartUI() {
+      const container = document.getElementById("cartItems");
+      const countEl = document.getElementById("cartCount");
+      const totalEl = document.getElementById("cartTotal");
+
+      let totalItems = 0;
+      let totalPrice = 0;
+      container.innerHTML = "";
+
+      cart.forEach(item => {
+        totalItems += item.qty;
+        totalPrice += item.price * item.qty;
+
+        const row = document.createElement("div");
+        row.className = "cart-row";
+        row.innerHTML = `
+          <div>
+            <p class="cart-row-title">${item.name}</p>
+            <p class="cart-row-sub">RM${item.price} × ${item.qty}</p>
+          </div>
+          <div class="cart-actions">
+            <button class="cart-btn" onclick="changeQty(${item.id}, -1)">−</button>
+            <button class="cart-btn" onclick="changeQty(${item.id}, 1)">+</button>
+            <button class="cart-btn danger" onclick="removeFromCart(${item.id})">Hapus</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      countEl.textContent = String(totalItems);
+      totalEl.textContent = "RM" + totalPrice.toFixed(2);
+    }
+
+    function openCart() {
+      document.getElementById("cartDrawer").classList.remove("hidden");
+    }
+
+    function closeCart() {
+      document.getElementById("cartDrawer").classList.add("hidden");
+    }
+
+    function openWhatsAppDirect() {
+      window.open(WHATSAPP_LINK, "_blank");
+    }
+
+    function checkoutWhatsApp() {
+      if (cart.length === 0) {
+        alert("Cart kosong. Sila tambah produk dahulu.");
+        return;
+      }
+
+      const lines = cart.map(
+        i => `• ${i.name} x${i.qty} — RM${(i.price * i.qty).toFixed(2)}`
+      );
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+      const msg = `Hai AFFILIX MEDIA! Saya nak checkout produk:\n\n${lines.join(
+        "\n"
+      )}\n\nTotal: RM${total.toFixed(
+        2
+      )}\n\nSila berikan langkah pembayaran.`;
+
+      const url = WHATSAPP_LINK + "&text=" + encodeURIComponent(msg);
+      window.open(url, "_blank");
+    }
+
+    function toggleFaq(i) {
+      const body = document.getElementById("faqBody" + i);
+      const icon = document.getElementById("faqIcon" + i);
+      const isHidden = body.classList.contains("hidden");
+
+      document.querySelectorAll('[id^="faqBody"]').forEach(el =>
+        el.classList.add("hidden")
+      );
+      document.querySelectorAll('[id^="faqIcon"]').forEach(el => (el.textContent = "+"));
+
+      if (isHidden) {
+        body.classList.remove("hidden");
+        icon.textContent = "−";
+      }
+    }
+
+    // Countdown (24 hours from now)
+    function startCountdown(hours = 24) {
+      const end = Date.now() + hours * 60 * 60 * 1000;
+      const dEl = document.getElementById("cdDays");
+      const hEl = document.getElementById("cdHours");
+      const mEl = document.getElementById("cdMinutes");
+      const sEl = document.getElementById("cdSeconds");
+
+      function tick() {
+        const diff = Math.max(0, end - Date.now());
+        const s = Math.floor(diff / 1000);
+        const days = Math.floor(s / 86400);
+        const hours = Math.floor((s % 86400) / 3600);
+        const mins = Math.floor((s % 3600) / 60);
+        const secs = s % 60;
+
+        dEl.textContent = String(days).padStart(2, "0");
+        hEl.textContent = String(hours).padStart(2, "0");
+        mEl.textContent = String(mins).padStart(2, "0");
+        sEl.textContent = String(secs).padStart(2, "0");
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    // Simple rotating testimonials (dummy content)
+    const testimonials = [
+      {
+        text: "Dari dulu pening nak urus semua subscription. Sekarang satu page je, pilih dan bayar. Senang gila!",
+        name: "Aina",
+        role: "Content Creator TikTok"
+      },
+      {
+        text: "Saya guna ChatGPT Plus & Canva Pro untuk urus marketing klien. Service laju dan support terbaik.",
+        name: "Hafiz",
+        role: "Freelance Marketer"
+      },
+      {
+        text: "CapCut Pro + preset video memang jimat masa untuk edit short-form content. Highly recommended.",
+        name: "Farah",
+        role: "Video Editor & UGC Creator"
+      }
+    ];
+
+    function startTestimonialRotation() {
+      const textEl = document.getElementById("testimonialText");
+      const nameEl = document.getElementById("testimonialName");
+      const roleEl = document.getElementById("testimonialRole");
+      let index = 0;
+
+      function render() {
+        const t = testimonials[index];
+        textEl.textContent = "“" + t.text + "”";
+        nameEl.textContent = t.name;
+        roleEl.textContent = t.role;
+        index = (index + 1) % testimonials.length;
+      }
+
+      render();
+      setInterval(render, 7000);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear().toString();
+
+      loadProductsFromStorage();
+      renderCategories();
+      renderProducts();
+      updateCartUI();
+
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+        searchInput.addEventListener("input", e => {
+          searchQuery = e.target.value || "";
+          renderProducts();
+        });
+      }
+
+      startCountdown(24);
+      startTestimonialRotation();
+    });
+  </script>
+</body>
+</html>
