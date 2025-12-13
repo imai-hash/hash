@@ -48,5 +48,15 @@
     "img": "https://framerusercontent.com/images/1OnT1XqeFhSWBZ7ostYY3sELM.png?width=2400&height=1284",
     "badge": "New",
     "stock": 19
+  },
+  {
+    "id": 1765654206371,
+    "name": "GOOGLE GEMINI AI ULTRA (1 BULAN)",
+    "price": 120,
+    "category": "AI",
+    "desc": "GOOGLE GEMINI AI ULTRA untuk 1 BULAN",
+    "img": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GoogleAIUltra_SS_1920x1080.width-1300.png",
+    "badge": "Sale",
+    "stock": 7
   }
 ]
