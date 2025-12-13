@@ -58,5 +58,15 @@
     "img": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GoogleAIUltra_SS_1920x1080.width-1300.png",
     "badge": "Sale",
     "stock": 7
+  },
+  {
+    "id": 1765654306934,
+    "name": "PERPLEXITY (1 TAHUN)",
+    "price": 50,
+    "category": "AI",
+    "desc": "PERPLEXITY untuk 1 TAHUN",
+    "img": "https://i.extremetech.com/imagery/content-types/04gL8zN52ODy95WCt04c9II/hero-image.fit_lim.v1746078023.png",
+    "badge": "Hot",
+    "stock": 3
   }
 ]
