@@ -48,15 +48,5 @@
     "img": "https://framerusercontent.com/images/1OnT1XqeFhSWBZ7ostYY3sELM.png?width=2400&height=1284",
     "badge": "New",
     "stock": 19
-  },
-  {
-    "id": 1765597288360,
-    "name": "33",
-    "price": 333,
-    "category": "33",
-    "desc": "333",
-    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoVKQLXL6D1LpDPlQ20X-v_VY80W6SYFKkGw&s",
-    "badge": "Hot",
-    "stock": 333
   }
 ]
