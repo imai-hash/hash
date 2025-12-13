@@ -1,1 +1,12 @@
-
+[
+  {
+    "id": 1765595673776,
+    "name": "test",
+    "price": 34324,
+    "category": "tetestest",
+    "desc": "testse",
+    "img": "stset",
+    "badge": "testes",
+    "stock": 333
+  }
+]
