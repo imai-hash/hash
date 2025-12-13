@@ -1,1 +1,52 @@
-[]
+[
+ {
+    "id": 1765562461586,
+    "name": "CHAT GPT GO (1 TAHUN)",
+    "price": 40,
+    "category": "AI",
+    "desc": "CHAT GPT ACCOUNT UNTUK 1 TAHUN",
+    "img": "https://cdn.shopaccino.com/igmguru/articles/what-is-chatgpt-go-2293284215712611_l.jpg?v=532",
+    "badge": "Hot",
+    "stock": 129
+  },
+  {
+    "id": 1765562557902,
+    "name": "CHAT GPT PLUS (1 BULAN)",
+    "price": 25,
+    "category": "AI",
+    "desc": "CHAT GPT PLUS UNTUK 1 BULAN",
+    "img": "https://e-solution.com/storage/component/24-11/p339emdDWKCYCqc6ffgVleAZNZB1qoCKAYsNEiEC.jpeg",
+    "badge": "New",
+    "stock": 301
+  },
+  {
+    "id": 1765562691503,
+    "name": "GOOGLE GEMINI AI PRO (1 TAHUN)",
+    "price": 40,
+    "category": "AI",
+    "desc": "GOOGLE GEMINI AI PRO untuk 1 TAHUN",
+    "img": "https://www.beingguru.com/wp-content/uploads/2025/10/Googles-Free-Gemini-AI-Pro-Plan-Brings-a-Big-Win-for-Pakistani-Students-758x426.jpg",
+    "badge": "Hot",
+    "stock": 83
+  },
+  {
+    "id": 1765562813406,
+    "name": "LOVABLE PRO (1 TAHUN)",
+    "price": 500,
+    "category": "AI",
+    "desc": "LOVABLE PRO untuk 1 TAHUN",
+    "img": "https://smartbottips.com/wp-content/uploads/2025/10/Lovable-AI-Review.webp",
+    "badge": "Hot",
+    "stock": 34
+  },
+  {
+    "id": 1765562850000,
+    "name": "BOLT.NEW PRO ACCOUNT",
+    "price": 300,
+    "category": "AI",
+    "desc": "ACCOUNT BOLT.NEW PRO",
+    "img": "https://framerusercontent.com/images/1OnT1XqeFhSWBZ7ostYY3sELM.png?width=2400&height=1284",
+    "badge": "New",
+    "stock": 19
+  }
+]
