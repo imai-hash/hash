@@ -48,5 +48,15 @@
     "img": "https://framerusercontent.com/images/1OnT1XqeFhSWBZ7ostYY3sELM.png?width=2400&height=1284",
     "badge": "New",
     "stock": 19
+  },
+  {
+    "id": 1765601180180,
+    "name": "imai",
+    "price": 3,
+    "category": "AI",
+    "desc": "3",
+    "img": "https://www.japan-translate.com/wp-content/uploads/2017/03/board-361516_1280.jpg",
+    "badge": "3",
+    "stock": 3
   }
 ]
