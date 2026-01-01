@@ -98,5 +98,15 @@
     "img": "434",
     "badge": "434",
     "stock": 434
+  },
+  {
+    "id": 1767276453260,
+    "name": "testestt",
+    "price": 3,
+    "category": "3",
+    "desc": "3",
+    "img": "33",
+    "badge": "3",
+    "stock": 3
   }
 ]
