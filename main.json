@@ -88,15 +88,5 @@
     "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4-zVQ-356BfQ24ublcLCRu5P2LXq20clF0w&s",
     "badge": "Hot",
     "stock": 10
-  },
-  {
-    "id": 1767276453260,
-    "name": "testestt",
-    "price": 3,
-    "category": "3",
-    "desc": "3",
-    "img": "33",
-    "badge": "3",
-    "stock": 3
   }
 ]
